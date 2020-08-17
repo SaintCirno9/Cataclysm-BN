@@ -1225,6 +1225,7 @@ void avatar::cycle_move_mode()
 
 bool avatar::wield( item &target )
 {
+    invalidate_inventory_validity_cache();
     if( is_wielding( target ) ) {
         return true;
     }

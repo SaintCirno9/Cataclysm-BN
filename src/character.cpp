@@ -2167,6 +2167,7 @@ int Character::get_mod_stat_from_bionic( const character_stat &Stat ) const
 cata::optional<std::list<item>::iterator> Character::wear_item( const item &to_wear,
         bool interactive )
 {
+    invalidate_inventory_validity_cache();
     const auto ret = can_wear( to_wear );
     if( !ret.success() ) {
         if( interactive ) {
@@ -2306,6 +2307,7 @@ int Character::i_add_to_container( const item &it, const bool unloading )
 
 item &Character::i_add( item it, bool should_stack )
 {
+    invalidate_inventory_validity_cache();
     itype_id item_type_id = it.typeId();
     last_item = item_type_id;
 
@@ -2332,6 +2334,7 @@ item &Character::i_add( item it, bool should_stack )
 
 std::list<item> Character::remove_worn_items_with( std::function<bool( item & )> filter )
 {
+    invalidate_inventory_validity_cache();
     std::list<item> result;
     for( auto iter = worn.begin(); iter != worn.end(); ) {
         if( filter( *iter ) ) {
@@ -2500,6 +2503,7 @@ void Character::drop( item_location loc, const tripoint &where )
     }
 
     drop( { drop_location( loc, loc->count() ) }, where );
+    invalidate_inventory_validity_cache();
 }
 
 void Character::drop( const drop_locations &what, const tripoint &target,
@@ -3076,8 +3080,16 @@ ret_val<bool> Character::can_unwield( const item &it ) const
     return ret_val<bool>::make_success();
 }
 
+void Character::invalidate_inventory_validity_cache()
+{
+    cache_inventory_is_valid = false;
+}
+
 void Character::drop_invalid_inventory()
 {
+    if( cache_inventory_is_valid ) {
+        return;
+    }
     bool dropped_liquid = false;
     for( const std::list<item> *stack : inv.const_slice() ) {
         const item &it = stack->front();
@@ -3096,6 +3108,8 @@ void Character::drop_invalid_inventory()
         auto items_to_drop = inv.remove_randomly_by_volume( volume_carried() - volume_capacity() );
         put_into_vehicle_or_drop( *this, item_drop_reason::tumbling, items_to_drop );
     }
+
+    cache_inventory_is_valid = true;
 }
 
 bool Character::has_artifact_with( const art_effect_passive effect ) const
@@ -9565,6 +9579,7 @@ void Character::on_worn_item_washed( const item &it )
 
 void Character::on_item_wear( const item &it )
 {
+    invalidate_inventory_validity_cache();
     for( const trait_id &mut : it.mutations_from_wearing( *this ) ) {
         mutation_effect( mut );
         recalc_sight_limits();
@@ -9580,6 +9595,7 @@ void Character::on_item_wear( const item &it )
 
 void Character::on_item_takeoff( const item &it )
 {
+    invalidate_inventory_validity_cache();
     for( const trait_id &mut : it.mutations_from_wearing( *this ) ) {
         mutation_loss_effect( mut );
         recalc_sight_limits();

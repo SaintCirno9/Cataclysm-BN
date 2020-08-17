@@ -1145,6 +1145,13 @@ void npc::stow_item( item &it )
 
 bool npc::wield( item &it )
 {
+    // sanity check: exit early if we're trying to wield the current weapon
+    // needed for ranged_balance_test
+    if( is_wielding( it ) ) {
+        return true;
+    }
+
+    invalidate_inventory_validity_cache();
     cached_info.erase( "weapon_value" );
     if( is_armed() ) {
         stow_item( weapon );
