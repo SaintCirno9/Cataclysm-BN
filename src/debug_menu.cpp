@@ -172,6 +172,7 @@ enum debug_menu_index {
     DEBUG_DISPLAY_LIGHTING,
     DEBUG_DISPLAY_RADIATION,
     DEBUG_DISPLAY_TRANSPARENCY,
+    DEBUG_DISPLAY_REACHABILITY_ZONES,
     DEBUG_DISPLAY_SUBMAP_GRID,
     DEBUG_TEST_MAP_EXTRA_DISTRIBUTION,
     DEBUG_VEHICLE_BATTERY_CHARGE,
@@ -216,6 +217,7 @@ static int info_uilist( bool display_all_entries = true )
             { uilist_entry( DEBUG_DISPLAY_VISIBILITY, true, 'v', _( "Toggle display visibility" ) ) },
             { uilist_entry( DEBUG_DISPLAY_LIGHTING, true, 'l', _( "Toggle display lighting" ) ) },
             { uilist_entry( DEBUG_DISPLAY_TRANSPARENCY, true, 'p', _( "Toggle display transparency" ) ) },
+            { uilist_entry( DEBUG_DISPLAY_REACHABILITY_ZONES, true, 'z', _( "Toggle display reachability zones" ) ) },
             { uilist_entry( DEBUG_DISPLAY_RADIATION, true, 'R', _( "Toggle display radiation" ) ) },
             { uilist_entry( DEBUG_DISPLAY_SUBMAP_GRID, true, 'o', _( "Toggle display submap grid" ) ) },
             { uilist_entry( DEBUG_SHOW_MUT_CAT, true, 'm', _( "Show mutation category levels" ) ) },
@@ -1745,6 +1747,9 @@ void debug()
             break;
         case DEBUG_DISPLAY_SUBMAP_GRID:
             g->debug_submap_grid_overlay = !g->debug_submap_grid_overlay;
+            break;
+        case DEBUG_DISPLAY_REACHABILITY_ZONES:
+            g->display_reahability_zones();
             break;
         case DEBUG_HOUR_TIMER:
             g->toggle_debug_hour_timer();

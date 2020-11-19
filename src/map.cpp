@@ -5400,7 +5400,7 @@ bool map::add_field( const tripoint &p, const field_type_id &type_id, int intens
 
     // Dirty the transparency cache now that field processing doesn't always do it
     if( fd_type.dirty_transparency_cache || !fd_type.is_transparent() ) {
-        set_transparency_cache_dirty( p );
+        set_transparency_cache_dirty( p, true );
         set_seen_cache_dirty( p );
     }
 
@@ -5433,7 +5433,7 @@ void map::remove_field( const tripoint &p, const field_type_id &field_to_remove 
         }
         const auto &fdata = field_to_remove.obj();
         if( fdata.dirty_transparency_cache || !fdata.is_transparent() ) {
-            set_transparency_cache_dirty( p );
+            set_transparency_cache_dirty( p, true );
             set_seen_cache_dirty( p );
         }
         if( fdata.is_dangerous() ) {
@@ -7972,7 +7972,11 @@ void map::build_map_cache( const int zlev, bool skip_lightmap )
         build_outside_cache( z );
         build_transparency_cache( z );
         update_suspension_cache( z );
-        seen_cache_dirty |= ( build_floor_cache( z ) && affects_seen_cache );
+        bool floor_cache_was_dirty = build_floor_cache( z );
+        seen_cache_dirty |= ( floor_cache_was_dirty && affects_seen_cache );
+        if( floor_cache_was_dirty && z > -OVERMAP_DEPTH ) {
+            get_cache( z - 1 ).r_up_cache->invalidate();
+        }
         seen_cache_dirty |= get_cache( z ).seen_cache_dirty && affects_seen_cache;
     }
     // needs a separate pass as it changes the caches on neighbour z-levels (e.g. floor_cache);
@@ -8708,5 +8712,24 @@ tripoint drawsq_params::center() const
         return g->u.pos() + g->u.view_offset;
     } else {
         return view_center;
+    }
+}
+// Get cache value for debug purposes
+int map::reachability_cache_value( const tripoint &p, bool vertical_cache,
+                                   reachability_cache_quadrant quadrant ) const
+{
+    if( !inbounds( p ) ) {
+        return -2;
+    }
+
+    // rebuild caches, so valid values are shown
+    has_potential_los( p, p ); // rebuild horizontal cache;
+    has_potential_los( p, p + tripoint_above ); // rebuild "up" cache
+
+    const level_cache &lc = get_cache( p.z );
+    if( vertical_cache ) {
+        return lc.r_up_cache->get_value( quadrant, p.xy() );
+    } else {
+        return lc.r_hor_cache->get_value( quadrant, p.xy() );
     }
 }
