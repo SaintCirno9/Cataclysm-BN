@@ -10158,7 +10158,9 @@ bool Character::sees( const Creature &critter ) const
     if( dist <= 3 && has_active_mutation( trait_ANTENNAE ) ) {
         return true;
     }
-
+    if( dist < MAX_CLAIRVOYANCE && dist < clairvoyance() ) {
+        return true;
+    }
     return Creature::sees( critter );
 }
 
