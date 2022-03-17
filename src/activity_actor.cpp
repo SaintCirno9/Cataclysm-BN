@@ -8,7 +8,7 @@
 #include <utility>
 
 #include "avatar_action.h"
-#include "activity_handlers.h" // put_into_vehicle_or_drop and drop_on_map
+#include "activity_handlers.h" // put_into_vehicle_or_drop, drop_on_map, move_items
 #include "advanced_inv.h"
 #include "avatar.h"
 #include "calendar.h"
@@ -17,6 +17,7 @@
 #include "enums.h"
 #include "event.h"
 #include "event_bus.h"
+#include "field_type.h"
 #include "game.h"
 #include "gates.h"
 #include "iexamine.h"
@@ -29,6 +30,7 @@
 #include "map.h"
 #include "map_iterator.h"
 #include "mapdata.h"
+#include "messages.h"
 #include "npc.h"
 #include "output.h"
 #include "options.h"
@@ -57,7 +59,13 @@ static const mtype_id mon_zombie_rot( "mon_zombie_rot" );
 static const mtype_id mon_skeleton( "mon_skeleton" );
 static const mtype_id mon_zombie_crawler( "mon_zombie_crawler" );
 
+static const zone_type_id zone_LOOT_IGNORE( "LOOT_IGNORE" );
+static const zone_type_id zone_LOOT_IGNORE_FAVORITES( "LOOT_IGNORE_FAVORITES" );
+static const zone_type_id zone_LOOT_UNSORTED( "LOOT_UNSORTED" );
+
 static const std::string flag_RELOAD_AND_SHOOT( "RELOAD_AND_SHOOT" );
+
+const int ACTIVITY_SEARCH_DISTANCE = 60;
 
 aim_activity_actor::aim_activity_actor()
 {
@@ -1029,6 +1037,353 @@ std::unique_ptr<activity_actor> wash_activity_actor::deserialize( JsonIn &jsin )
     return actor.clone();
 }
 
+void move_loot_activity_actor::start( player_activity &act, Character &who )
+{
+    // set moves_left to a large number because we don't know how long it will take
+    act.moves_left = calendar::INDEFINITELY_LONG;
+    const auto abspos = g->m.getabs( who.pos() );
+
+    // if unsorted_zone_tripoints is not empty, it means this is an restart, go to do_turn
+    if( !unsorted_zone_tripoints.empty() ) {
+        // we have moved too long, recalculate src tile order
+        if( last_moved_distance > 16 ) {
+            const auto cmp = [abspos]( tripoint a, tripoint b ) {
+                const int da = rl_dist( abspos, a );
+                const int db = rl_dist( abspos, b );
+
+                return da < db;
+            };
+
+            std::sort( unsorted_zone_tripoints.begin(), unsorted_zone_tripoints.end(), cmp );
+        }
+        return;
+    }
+
+    start_pos = abspos;
+    auto &mgr = zone_manager::get_manager();
+    if( g->m.check_vehicle_zones( g->get_levz() ) ) {
+        mgr.cache_vzones();
+    }
+
+    // get all src zone tripoints, do not search the z level
+    auto unsorted_zone_tripoints_set = mgr.get_near( zone_LOOT_UNSORTED, abspos,
+                                       ACTIVITY_SEARCH_DISTANCE );
+
+    // find position waiting for move loot
+    for( auto unsorted_zone_tripoints_set_iter = unsorted_zone_tripoints_set.begin();
+         unsorted_zone_tripoints_set_iter != unsorted_zone_tripoints_set.end(); ) {
+        const tripoint src_abs = *unsorted_zone_tripoints_set_iter;
+        const tripoint src_loc = g->m.getlocal( src_abs );
+
+        // skip tiles in IGNORE zone and tiles on fire
+        // (to prevent taking out wood off the lit brazier)
+        // and inaccessible furniture, like filled charcoal kiln
+        if( mgr.has( zone_LOOT_IGNORE, src_abs ) || g->m.get_field( src_loc, fd_fire ) != nullptr ||
+            !g->m.can_put_items_ter_furn( src_loc ) ) {
+            unsorted_zone_tripoints_set_iter = unsorted_zone_tripoints_set.erase(
+                                                   unsorted_zone_tripoints_set_iter );
+            continue;
+        }
+
+        //nothing to sort?
+        const cata::optional<vpart_reference> vp = g->m.veh_at( src_loc ).part_with_feature( "CARGO",
+                false );
+        if( ( !vp || vp->vehicle().get_items( vp->part_index() ).empty() )
+            && g->m.i_at( src_loc ).empty() ) {
+            unsorted_zone_tripoints_set_iter = unsorted_zone_tripoints_set.erase(
+                                                   unsorted_zone_tripoints_set_iter );
+            continue;
+        }
+
+        ++unsorted_zone_tripoints_set_iter;
+    }
+
+    unsorted_zone_tripoints = get_sorted_tiles_by_distance( abspos, unsorted_zone_tripoints_set );
+}
+
+void move_loot_activity_actor::do_turn( player_activity &act, Character &who )
+{
+    enum class set_destination_result {
+        success,
+        failed,
+        unnecessary,
+        outofmap
+    };
+
+    auto set_destination = [this]( player_activity & act, Character & who, const tripoint & src_loc ) {
+        // checks for npcs
+        if( !g->m.inbounds( src_loc ) ) {
+            if( !g->m.inbounds( who.pos() ) ) {
+                // who is implicitly an NPC that has been moved off the map, so reset the activity
+                // and unload them
+                who.cancel_activity();
+                who.assign_activity( act );
+                who.set_moves( 0 );
+                g->reload_npcs();
+                return set_destination_result::outofmap;
+            }
+            // get route to nearest adjacent tile
+            auto route = route_adjacent( who, src_loc );
+            if( route.empty() ) {
+                unreachable_src_abs_points.emplace_back( g->m.getabs( src_loc ) );
+                return set_destination_result::failed;
+            }
+            last_moved_distance = route.size();
+            who.set_destination( route, act );
+            who.cancel_activity();
+            return set_destination_result::success;
+        }
+
+        bool is_adjacent_or_closer = square_dist( who.pos(), src_loc ) <= 1;
+        if( !is_adjacent_or_closer ) {
+            // get route to nearest adjacent tile
+            auto route = route_adjacent( who, src_loc );
+            // check if we found path to source adjacent tile
+            if( route.empty() ) {
+                unreachable_src_abs_points.emplace_back( g->m.getabs( src_loc ) );
+                return set_destination_result::failed;
+            }
+
+            // set the destination and restart activity after player arrives there
+            // we don't need to check for safe mode,
+            // activity will be restarted only if
+            // player arrives on destination tile
+            last_moved_distance = route.size();
+            who.set_destination( route, act );
+            who.cancel_activity();
+            return set_destination_result::success;
+        }
+        return set_destination_result::unnecessary;
+    };
+
+    for( auto unsorted_zone_tripoints_iter = unsorted_zone_tripoints.begin();
+         unsorted_zone_tripoints_iter != unsorted_zone_tripoints.end(); ) {
+        const tripoint &src_abs = *unsorted_zone_tripoints_iter;
+        const tripoint src_loc = g->m.getlocal( src_abs );
+
+        auto &mgr = zone_manager::get_manager();
+        auto abspos = g->m.getabs( who.pos() );
+
+        tripoint dest_loc = tripoint_max;
+
+        vehicle *src_veh, *dest_veh;
+        int src_part, dest_part;
+
+        // lambda to check if the item should be skipped
+        auto should_skip = [&]( item &this_item ) {
+            // skip unpickable liquid
+            if( this_item.made_of( LIQUID ) ) {
+                return true;
+            }
+
+            // skip favorite items in ignore favorite zones
+            if( this_item.is_favorite &&
+                mgr.has( zone_LOOT_IGNORE_FAVORITES, src_abs ) ) {
+                return true;
+            }
+
+            return false;
+        };
+        //Check source for cargo part
+        const auto vp = g->m.veh_at( src_loc ).part_with_feature( "CARGO", false );
+        if( vp ) {
+            src_veh = &vp->vehicle();
+            src_part = vp->part_index();
+        } else {
+            src_veh = nullptr;
+            src_part = -1;
+        }
+        if( items_cache.empty() ) {
+            //map_stack and vehicle_stack are different types but inherit from item_stack
+            // TODO: use one for loop
+            if( vp ) {
+                for( auto &it : src_veh->get_items( src_part ) ) {
+                    items_cache.push_back( std::make_pair( &it, true ) );
+                }
+            }
+            for( auto &it : g->m.i_at( src_loc ) ) {
+                items_cache.push_back( std::make_pair( &it, false ) );
+            }
+        }
+
+        bool any_item_move_failed = false;
+        // loop through all items in the source tile, controlled manually
+        for( auto iter = items_cache.begin(); iter != items_cache.end(); ) {
+
+            item &this_item = *iter->first;
+            bool in_vehicle = iter->second;
+
+            if( should_skip( this_item ) ) {
+                iter = items_cache.erase( iter );
+                continue;
+            }
+
+            // determine destination zones, search z-level if fov_3d is true
+            const auto dest_zones = mgr.get_near_zones_for_item( this_item, src_abs,
+                                    ACTIVITY_SEARCH_DISTANCE, g->u.get_faction()->id, fov_3d );
+
+            // check whether the item has destination zones
+            if( dest_zones.empty() ) {
+                iter = items_cache.erase( iter );
+                continue;
+            };
+
+            // try to get the best destination point
+            for( auto &dest_zone : dest_zones ) {
+                // no need to move item if it is already in the destination zone
+                if( dest_zone->has_inside( src_abs ) ) {
+                    dest_loc = tripoint_min;
+                    break;
+                }
+
+                tripoint_range<tripoint> dest_zone_tiles = tripoint_range<tripoint>( dest_zone->get_start_point(),
+                        dest_zone->get_end_point() );
+                for( auto &absp : dest_zone_tiles ) {
+                    const tripoint &locp = g->m.getlocal( absp );
+                    if( square_dist( absp, src_abs ) > ACTIVITY_SEARCH_DISTANCE ) {
+                        continue;
+                    }
+                    //Check destination for cargo part
+                    if( const cata::optional<vpart_reference> vp = g->m.veh_at( locp ).part_with_feature( "CARGO",
+                            false ) ) {
+                        dest_veh = &vp->vehicle();
+                        dest_part = vp->part_index();
+                    } else {
+                        dest_veh = nullptr;
+                        dest_part = -1;
+                    }
+
+                    // skip tiles with inaccessible furniture, like filled charcoal kiln
+                    if( !g->m.can_put_items_ter_furn( locp ) ||
+                        static_cast<int>( g->m.i_at( locp ).size() ) >= MAX_ITEM_IN_SQUARE ) {
+                        continue;
+                    }
+
+                    // if there's a vehicle with space do not check the tile beneath
+                    auto free_space = dest_veh ? dest_veh->free_volume( dest_part ) : g->m.free_volume( locp );
+                    // check free space at destination
+                    if( free_space >= this_item.volume() ) {
+                        dest_loc = locp;
+                        break;
+                    }
+                }
+                if( dest_loc != tripoint_max ) {
+                    break;
+                }
+            }
+
+            if( dest_loc == tripoint_max || dest_loc == tripoint_min ) {
+                // No destination found or already in the destination zone
+                any_item_move_failed = dest_loc == tripoint_max;
+                iter = items_cache.erase( iter );
+                continue;
+            }
+
+            // if we reach here, it means the there are actually items to move
+            auto result = set_destination( act, who, src_loc );
+            if( result != set_destination_result::unnecessary ) {
+                if( result == set_destination_result::success || result == set_destination_result::outofmap ) {
+                    return;
+                } else if( result == set_destination_result::failed ) {
+                    break;
+                }
+            }
+
+            // if we reach here, it means we are adjacent to the source tile, start moving!
+            move_item( who, this_item, this_item.count(), src_loc, dest_loc, in_vehicle ? src_veh : nullptr,
+                       in_vehicle ? src_part : -1 );
+            // item was moved, reset the destination
+            dest_loc = tripoint_max;
+            iter = items_cache.erase( iter );
+
+            // no moves left, so return and go to next turn
+            if( who.moves <= 0 ) {
+                if( items_cache.empty() ) {
+                    unsorted_zone_tripoints_iter = unsorted_zone_tripoints.erase( unsorted_zone_tripoints_iter );
+                }
+                return;
+            }
+        }
+        if( any_item_move_failed ) {
+            add_msg( m_info,
+                     _( "%s can't move some items to the destination zone. No avialable destination point." ),
+                     who.disp_name() );
+        }
+
+        // finished this src tile, move to next
+        // to avoid infinite loop
+        unsorted_zone_tripoints_iter = unsorted_zone_tripoints.erase( unsorted_zone_tripoints_iter );
+        items_cache.clear();
+    }
+    // we're done, set moves_left to 0 to prevent infinite loop
+    act.moves_left = 0;
+}
+
+void move_loot_activity_actor::finish( player_activity &act, Character &who )
+{
+    add_msg( m_info, _( "%s sorted out every item possible." ), who.disp_name( false, true ) );
+    if( !unreachable_src_abs_points.empty() ) {
+        std::string tripoints_message;
+        for( auto &tp : unreachable_src_abs_points ) {
+            tripoints_message += direction_suffix( start_pos, tp );
+            tripoints_message += " ";
+        }
+        tripoints_message.erase( tripoints_message.size() - 1 );
+        add_msg( m_info,
+                 _( "%s can't reach the source tile at %s form the start point. Try to sort out loot without a cart." ),
+                 who.disp_name(), tripoints_message );
+    }
+    if( who.is_npc() ) {
+        npc *guy = dynamic_cast<npc *>( &who );
+        guy->revert_after_activity();
+    } else {
+        // get route to start poistion
+        auto route = route_adjacent( who, g->m.getlocal( start_pos ) );
+
+        if( !route.empty() ) {
+            // return to start position
+            who.set_destination( route, player_activity() );
+        }
+    }
+    act.set_to_null();
+}
+
+void move_loot_activity_actor::canceled( player_activity &act, Character &who )
+{
+    /* if( !unreachable_src_abs_points.empty() ) {
+        const tripoint who_abs = g->m.getabs( who.pos() );
+        std::string tripoints_message;
+        for( auto &tp : unreachable_src_abs_points ) {
+            tripoints_message += direction_suffix( who_abs, tp );
+            tripoints_message += " ";
+        }
+        tripoints_message.erase( tripoints_message.size() - 1 );
+        add_msg( m_info, _( "%s can't reach the source tile at %s. Try to sort out loot without a cart." ),
+                 who.disp_name(), tripoints_message );
+    } */
+}
+
+void move_loot_activity_actor::serialize( JsonOut &jsout ) const
+{
+    jsout.start_object();
+
+    //do nothing
+
+    jsout.end_object();
+}
+
+std::unique_ptr<activity_actor> move_loot_activity_actor::deserialize( JsonIn &jsin )
+{
+    move_loot_activity_actor actor;
+
+    JsonObject data = jsin.get_object();
+
+    //do nothing
+
+    return actor.clone();
+}
+
+
 namespace activity_actors
 {
 
@@ -1043,6 +1398,7 @@ deserialize_functions = {
     { activity_id( "ACT_HACKING" ), &hacking_activity_actor::deserialize },
     { activity_id( "ACT_MIGRATION_CANCEL" ), &migration_cancel_activity_actor::deserialize },
     { activity_id( "ACT_MOVE_ITEMS" ), &move_items_activity_actor::deserialize },
+    { activity_id( "ACT_MOVE_LOOT" ), &move_loot_activity_actor::deserialize },
     { activity_id( "ACT_OPEN_GATE" ), &open_gate_activity_actor::deserialize },
     { activity_id( "ACT_PICKUP" ), &pickup_activity_actor::deserialize },
     { activity_id( "ACT_STASH" ), &stash_activity_actor::deserialize },

@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "action.h"
+#include "activity_actor_definitions.h"
 #include "advanced_inv.h"
 #include "animation.h"
 #include "auto_note.h"
@@ -82,7 +83,6 @@
 #include "worldfactory.h"
 
 static const activity_id ACT_FERTILIZE_PLOT( "ACT_FERTILIZE_PLOT" );
-static const activity_id ACT_MOVE_LOOT( "ACT_MOVE_LOOT" );
 static const activity_id ACT_MULTIPLE_BUTCHER( "ACT_MULTIPLE_BUTCHER" );
 static const activity_id ACT_MULTIPLE_CHOP_PLANKS( "ACT_MULTIPLE_CHOP_PLANKS" );
 static const activity_id ACT_MULTIPLE_CHOP_TREES( "ACT_MULTIPLE_CHOP_TREES" );
@@ -1098,7 +1098,7 @@ static void loot()
     const bool has_fertilizer = u.has_item_with_flag( "FERTILIZER" );
 
     // Manually update vehicle cache.
-    // In theory this would be handled by the related activity (activity_on_turn_move_loot())
+    // In theory this would be handled by the related activity actor move_loot_activity_actor()
     // but with a stale cache we never get that far.
     mgr.cache_vzones();
 
@@ -1181,7 +1181,7 @@ static void loot()
             add_msg( _( "Never mind." ) );
             break;
         case SortLoot:
-            u.assign_activity( ACT_MOVE_LOOT );
+            u.assign_activity( player_activity( move_loot_activity_actor() ) );
             break;
         case FertilizePlots:
             u.assign_activity( ACT_FERTILIZE_PLOT );

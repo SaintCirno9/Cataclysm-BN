@@ -6265,7 +6265,9 @@ bool game::check_zone( const zone_type_id &type, const tripoint &where ) const
 
 bool game::check_near_zone( const zone_type_id &type, const tripoint &where ) const
 {
-    return zone_manager::get_manager().has_near( type, m.getabs( where ) );
+    // 60 is ACTIVITY_SEARCH_DISTANCE defined in activity_item_handling.cpp
+    // which is the max distance for player to search zones.
+    return zone_manager::get_manager().has_near( type, m.getabs( where ), 60 );
 }
 
 bool game::is_zones_manager_open() const
@@ -6408,20 +6410,17 @@ void game::zones_manager()
     bool show_all_zones = false;
     int zone_cnt = 0;
 
-    // get zones on the same z-level, with distance between player and
-    // zone center point <= 50 or all zones, if show_all_zones is true
+    // get zones with distance between player and
+    // zone center point <= 60 or all zones, if show_all_zones is true.
+    // 60 is ACTIVITY_SEARCH_DISTANCE defined in activity_item_handling.cpp
+    // which is the max distance for player to search zones.
     auto get_zones = [&]() {
         std::vector<zone_manager::ref_zone_data> zones;
         if( show_all_zones ) {
             zones = mgr.get_zones();
         } else {
             const tripoint &u_abs_pos = m.getabs( u.pos() );
-            for( zone_manager::ref_zone_data &ref : mgr.get_zones() ) {
-                const tripoint &zone_abs_pos = ref.get().get_center_point();
-                if( u_abs_pos.z == zone_abs_pos.z && rl_dist( u_abs_pos, zone_abs_pos ) <= 50 ) {
-                    zones.emplace_back( ref );
-                }
-            }
+            zones = mgr.get_zones( u.get_faction()->id, u_abs_pos, 60, fov_3d );
         }
         zone_cnt = static_cast<int>( zones.size() );
         return zones;

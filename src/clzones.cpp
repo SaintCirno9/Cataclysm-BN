@@ -603,12 +603,12 @@ bool zone_manager::has_defined( const zone_type_id &type, const faction_id &fac 
 void zone_manager::cache_data()
 {
     area_cache.clear();
-
+    zone_caches["map_zone"].clear();
     for( auto &elem : zones ) {
         if( !elem.get_enabled() ) {
             continue;
         }
-
+        zone_caches["map_zone"].emplace_back( elem );
         const std::string &type_hash = elem.get_type_hash();
         auto &cache = area_cache[type_hash];
 
@@ -623,12 +623,13 @@ void zone_manager::cache_data()
 void zone_manager::cache_vzones()
 {
     vzone_cache.clear();
+    zone_caches["vehicle_zone"].clear();
     auto vzones = g->m.get_vehicle_zones( g->get_levz() );
     for( auto elem : vzones ) {
         if( !elem->get_enabled() ) {
             continue;
         }
-
+        zone_caches["vehicle_zone"].emplace_back( *elem );
         const std::string &type_hash = elem->get_type_hash();
         auto &cache = vzone_cache[type_hash];
 
@@ -692,32 +693,31 @@ std::unordered_set<tripoint> zone_manager::get_vzone_set( const zone_type_id &ty
 bool zone_manager::has( const zone_type_id &type, const tripoint &where,
                         const faction_id &fac ) const
 {
-    const auto &point_set = get_point_set( type, fac );
-    const auto &vzone_set = get_vzone_set( type, fac );
-    return point_set.find( where ) != point_set.end() || vzone_set.find( where ) != vzone_set.end();
+    for( const auto &zone_cache : zone_caches ) {
+        for( const auto &zone : zone_cache.second ) {
+            if( zone.get_enabled() && zone.get_type() == type && zone.get_faction() == fac &&
+                zone.has_inside( where ) ) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool zone_manager::has_near( const zone_type_id &type, const tripoint &where, int range,
-                             const faction_id &fac ) const
+                             const faction_id &fac, bool search_zlevel ) const
 {
-    const auto &point_set = get_point_set( type, fac );
-    for( auto &point : point_set ) {
-        if( point.z == where.z ) {
-            if( square_dist( point, where ) <= range ) {
+    search_zlevel = g->m.has_zlevels() && search_zlevel;
+    for( const auto &zone_cache : zone_caches ) {
+        for( const auto &zone : zone_cache.second ) {
+            if( zone.get_enabled() && zone.get_type() == type && zone.get_faction() == fac &&
+                square_dist( zone.get_center_point(), where ) <= range && ( search_zlevel ||
+                        zone.get_center_point().z == where.z ) ) {
                 return true;
             }
         }
-    }
 
-    const auto &vzone_set = get_vzone_set( type, fac );
-    for( auto &point : vzone_set ) {
-        if( point.z == where.z ) {
-            if( square_dist( point, where ) <= range ) {
-                return true;
-            }
-        }
     }
-
     return false;
 }
 
@@ -756,7 +756,7 @@ const zone_data *zone_manager::get_zone_at( const tripoint &where, const zone_ty
 
 bool zone_manager::custom_loot_has( const tripoint &where, const item *it ) const
 {
-    auto zone = get_zone_at( where, zone_LOOT_CUSTOM );
+    const zone_data *zone = get_zone_at( where, zone_LOOT_CUSTOM );
     if( !zone || !it ) {
         return false;
     }
@@ -768,36 +768,33 @@ bool zone_manager::custom_loot_has( const tripoint &where, const item *it ) cons
 }
 
 std::unordered_set<tripoint> zone_manager::get_near( const zone_type_id &type,
-        const tripoint &where, int range, const item *it, const faction_id &fac ) const
+        const tripoint &where, int range, const item *it, const faction_id &fac, bool search_zlevel ) const
 {
+    search_zlevel = g->m.has_zlevels() && search_zlevel;
     const auto &point_set = get_point_set( type, fac );
     auto near_point_set = std::unordered_set<tripoint>();
 
-    for( auto &point : point_set ) {
-        if( point.z == where.z ) {
-            if( square_dist( point, where ) <= range ) {
-                if( it && has( zone_LOOT_CUSTOM, point ) ) {
-                    if( custom_loot_has( point, it ) ) {
-                        near_point_set.insert( point );
-                    }
-                } else {
+    for( const auto &point : point_set ) {
+        if( square_dist( point, where ) <= range && ( search_zlevel || point.z == where.z ) ) {
+            if( it && has( zone_LOOT_CUSTOM, point, fac ) ) {
+                if( custom_loot_has( point, it ) ) {
                     near_point_set.insert( point );
                 }
+            } else {
+                near_point_set.insert( point );
             }
         }
     }
 
     const auto &vzone_set = get_vzone_set( type, fac );
-    for( auto &point : vzone_set ) {
-        if( point.z == where.z ) {
-            if( square_dist( point, where ) <= range ) {
-                if( it && has( zone_LOOT_CUSTOM, point ) ) {
-                    if( custom_loot_has( point, it ) ) {
-                        near_point_set.insert( point );
-                    }
-                } else {
+    for( const auto &point : vzone_set ) {
+        if( square_dist( point, where ) <= range && ( search_zlevel || point.z == where.z ) ) {
+            if( it && has( zone_LOOT_CUSTOM, point, fac ) ) {
+                if( custom_loot_has( point, it ) ) {
                     near_point_set.insert( point );
                 }
+            } else {
+                near_point_set.insert( point );
             }
         }
     }
@@ -843,58 +840,87 @@ cata::optional<tripoint> zone_manager::get_nearest( const zone_type_id &type, co
     return nearest_pos;
 }
 
-zone_type_id zone_manager::get_near_zone_type_for_item( const item &it,
-        const tripoint &where, int range ) const
+const std::list<const zone_data *> zone_manager::get_near_zones_for_item( const item &it, const tripoint &where,
+        int range, const faction_id &fac, bool search_zlevel ) const
 {
+    search_zlevel = g->m.has_zlevels() && search_zlevel;
     const item_category &cat = it.get_category();
+    std::list<const zone_data *> zones;
 
-    if( has_near( zone_LOOT_CUSTOM, where, range ) ) {
-        if( !get_near( zone_LOOT_CUSTOM, where, range, &it ).empty() ) {
-            return zone_LOOT_CUSTOM;
-        }
-    }
-    if( it.has_flag( flag_FIREWOOD ) ) {
-        if( has_near( zone_LOOT_WOOD, where, range ) ) {
-            return zone_LOOT_WOOD;
-        }
-    }
-    if( it.is_corpse() ) {
-        if( has_near( zone_LOOT_CORPSE, where, range ) ) {
-            return zone_LOOT_CORPSE;
-        }
-    }
-
-    cata::optional<zone_type_id> zone_check_first = cat.priority_zone( it );
-    if( zone_check_first && has_near( *zone_check_first, where, range ) ) {
-        return *zone_check_first;
-    }
-
-    if( cat.zone() ) {
-        return *cat.zone();
-    }
-
-    if( cat.get_id() == itcat_food ) {
-        const bool preserves = it.is_food_container() && it.type->container->preserves;
-
-        // skip food without comestible, like MREs
-        if( const item *it_food = it.get_food() ) {
-            if( it_food->get_comestible()->comesttype == "DRINK" ) {
-                if( !preserves && it_food->goes_bad() && has_near( zone_LOOT_PDRINK, where, range ) ) {
-                    return zone_LOOT_PDRINK;
-                } else if( has_near( zone_LOOT_DRINK, where, range ) ) {
-                    return zone_LOOT_DRINK;
+    bool is_wood = it.has_flag( flag_FIREWOOD );
+    bool is_corpse = it.is_corpse();
+    auto priority_zone_type = cat.priority_zone( it );
+    auto category_zone_type = cat.zone();
+    bool is_food = cat.get_id() == itcat_food;
+    const item *food = it.get_food();
+    bool preserves = is_food && it.is_food_container() && it.type->container->preserves;
+    bool is_drink = is_food && food && food->get_comestible()->comesttype == "DRINK";
+    bool is_pfood = is_food && !preserves && food && food->goes_bad();
+    bool is_pdrink = is_drink && !preserves && food && food->goes_bad();
+    
+    for( auto &zone_cache : zone_caches ) {
+        for( auto &zone : zone_cache.second ) {
+            tripoint center_point = zone.get_center_point();
+            if( square_dist( center_point, where ) > range || !( search_zlevel ||
+                    center_point.z == where.z ) ) {
+                continue;
+            }
+            if( zone.get_type() == zone_LOOT_CUSTOM ) {
+                const loot_options &options = dynamic_cast<const loot_options &>( zone.get_options() );
+                std::string filter_string = options.get_mark();
+                if( item_filter_from_string( filter_string )( it ) ) {
+                    zones.push_back( &zone );
                 }
+                continue;
             }
+            bool flag = is_wood && zone.get_type() == zone_LOOT_WOOD;
+            flag = flag || ( is_corpse && zone.get_type() == zone_LOOT_CORPSE );
+            flag = flag || ( priority_zone_type && zone.get_type() == *priority_zone_type );
+            flag = flag || ( category_zone_type && zone.get_type() == *category_zone_type );
+            flag = flag || ( is_food && zone.get_type() == zone_LOOT_FOOD );
+            flag = flag || ( is_drink && zone.get_type() == zone_LOOT_DRINK );
+            flag = flag || ( is_pfood && zone.get_type() == zone_LOOT_PFOOD );
+            flag = flag || ( is_pdrink && zone.get_type() == zone_LOOT_PDRINK );
 
-            if( !preserves && it_food->goes_bad() && has_near( zone_LOOT_PFOOD, where, range ) ) {
-                return zone_LOOT_PFOOD;
+            if( flag ) {
+                zones.push_back( &zone );
             }
         }
-
-        return zone_LOOT_FOOD;
     }
 
-    return zone_type_id();
+    // Custom zone with options > pdrink > drink > pfood > food = priority_zone (filthy clothing)
+    // = wood = corpse > category zone > custom zone with no option
+    auto get_zone_priority = [&]( const zone_data & zone ) {
+        if( zone.get_type() == zone_LOOT_CUSTOM ) {
+            const loot_options &options = dynamic_cast<const loot_options &>( zone.get_options() );
+            std::string filter_string = options.get_mark();
+            if( filter_string.empty() ) {
+                return 0;
+            } else {
+                return 5;
+            }
+        }
+        if( zone.get_type() == zone_LOOT_WOOD || zone.get_type() == zone_LOOT_CORPSE ||
+            zone.get_type() == *priority_zone_type || zone.get_type() == zone_LOOT_PFOOD ) {
+            return 2;
+        }
+        if( zone.get_type() == zone_LOOT_DRINK ) {
+            return 3;
+        }
+        if( zone.get_type() == zone_LOOT_PDRINK ) {
+            return 4;
+        }
+
+        return 1;
+    };
+    // Sort zones by priority, descending
+    auto cmp = [&]( const zone_data * lhs, const zone_data * rhs ) {
+        return get_zone_priority( *lhs ) > get_zone_priority( *rhs );
+    };
+    // Use stable_sort to preserve zone order when zones have the same priority
+    // So the active index in zone manager window could be used
+    std::stable_sort( zones.begin(), zones.end(), cmp );
+    return zones;
 }
 
 std::vector<zone_data> zone_manager::get_zones( const zone_type_id &type,
@@ -902,10 +928,20 @@ std::vector<zone_data> zone_manager::get_zones( const zone_type_id &type,
 {
     auto zones = std::vector<zone_data>();
 
-    for( const auto &zone : this->zones ) {
+    for( auto &zone : this->zones ) {
         if( zone.get_type() == type && zone.get_faction() == fac ) {
             if( zone.has_inside( where ) ) {
                 zones.emplace_back( zone );
+            }
+        }
+    }
+
+    auto vzones = g->m.get_vehicle_zones( g->get_levz() );
+
+    for( auto &zone : vzones ) {
+        if( zone->get_type() == type && zone->get_faction() == fac ) {
+            if( zone->has_inside( where ) ) {
+                zones.emplace_back( *zone );
             }
         }
     }
@@ -1082,20 +1118,32 @@ void zone_manager::rotate_zones( map &target_map, const int turns )
     }
 }
 
-std::vector<zone_manager::ref_zone_data> zone_manager::get_zones( const faction_id &fac )
+std::vector<zone_manager::ref_zone_data> zone_manager::get_zones( const faction_id &fac,
+        const tripoint &where, int range, bool search_zlevel )
 {
+    search_zlevel = g->m.has_zlevels() && search_zlevel;
     auto zones = std::vector<ref_zone_data>();
 
     for( auto &zone : this->zones ) {
         if( zone.get_faction() == fac ) {
+            if( where != tripoint_zero && ( ( !search_zlevel && zone.get_start_point().z != where.z ) ||
+                                            ( range != -1 && square_dist( zone.get_center_point(), where ) > range ) ) ) {
+                continue;
+            }
+
             zones.emplace_back( zone );
         }
     }
 
     auto vzones = g->m.get_vehicle_zones( g->get_levz() );
 
-    for( auto zone : vzones ) {
+    for( const auto zone : vzones ) {
         if( zone->get_faction() == fac ) {
+            if( where != tripoint_zero && ( ( !search_zlevel && zone->get_start_point().z != where.z ) ||
+                                            ( range != -1 && square_dist( zone->get_center_point(), where ) > range ) ) ) {
+                continue;
+            }
+
             zones.emplace_back( *zone );
         }
     }
@@ -1103,21 +1151,33 @@ std::vector<zone_manager::ref_zone_data> zone_manager::get_zones( const faction_
     return zones;
 }
 
+
 std::vector<zone_manager::ref_const_zone_data> zone_manager::get_zones(
-    const faction_id &fac ) const
+    const faction_id &fac, const tripoint &where, int range, bool search_zlevel ) const
 {
+    search_zlevel = g->m.has_zlevels() && search_zlevel;
     auto zones = std::vector<ref_const_zone_data>();
 
     for( auto &zone : this->zones ) {
         if( zone.get_faction() == fac ) {
+            if( where != tripoint_zero && ( ( !search_zlevel && zone.get_start_point().z != where.z ) ||
+                                            ( range != -1 && square_dist( zone.get_center_point(), where ) > range ) ) ) {
+                continue;
+            }
+
             zones.emplace_back( zone );
         }
     }
 
     auto vzones = g->m.get_vehicle_zones( g->get_levz() );
 
-    for( auto zone : vzones ) {
+    for( const auto zone : vzones ) {
         if( zone->get_faction() == fac ) {
+            if( where != tripoint_zero && ( ( !search_zlevel && zone->get_start_point().z != where.z ) ||
+                                            ( range != -1 && square_dist( zone->get_center_point(), where ) > range ) ) ) {
+                continue;
+            }
+
             zones.emplace_back( *zone );
         }
     }

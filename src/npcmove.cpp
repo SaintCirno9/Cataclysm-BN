@@ -13,6 +13,7 @@
 
 #include "active_item_cache.h"
 #include "activity_handlers.h"
+#include "activity_actor_definitions.h"
 #include "basecamp.h"
 #include "bionics.h"
 #include "bodypart.h"
@@ -2583,7 +2584,7 @@ bool npc::find_job_to_perform()
         }
         player_activity scan_act = player_activity( elem );
         if( elem == activity_id( "ACT_MOVE_LOOT" ) ) {
-            assign_activity( elem );
+            assign_activity( player_activity( move_loot_activity_actor() ) );
         } else if( generic_multi_activity_handler( scan_act, *this->as_player(), true ) ) {
             assign_activity( elem );
             return true;

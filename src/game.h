@@ -568,7 +568,15 @@ class game
         cata::optional<tripoint> look_debug();
 
         bool check_zone( const zone_type_id &type, const tripoint &where ) const;
-        /** Checks whether or not there is a zone of particular type nearby */
+        /**
+         * @brief Checks whether or not there is a zone of particular type nearby.
+         * Used to display zone action menu, shouldn't search zones at different zlevel.
+         *
+         * @param type The type of zone to check for.
+         * @param where Start tripoint to check for the zone. Currently is player postion.
+         * @return true
+         * @return false
+         */
         bool check_near_zone( const zone_type_id &type, const tripoint &where ) const;
         bool is_zones_manager_open() const;
         void zones_manager();

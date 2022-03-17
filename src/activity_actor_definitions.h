@@ -4,6 +4,7 @@
 
 #include "activity_actor.h"
 
+#include "clzones.h"
 #include "item_handling_util.h"
 #include "item_location.h"
 #include "memory_fast.h"
@@ -449,6 +450,39 @@ class wash_activity_actor : public activity_actor
             return std::make_unique<wash_activity_actor>( *this );
         }
 
+        void serialize( JsonOut &jsout ) const override;
+        static std::unique_ptr<activity_actor> deserialize( JsonIn &jsin );
+};
+
+class move_loot_activity_actor : public activity_actor
+{
+    private:
+        std::vector<tripoint> unsorted_zone_tripoints;
+        tripoint start_pos;
+        size_t last_moved_distance;
+        /**
+         * Cache the src tile items.
+         * The boolean in this pair being true indicates the item is from a vehicle storage space
+         * 
+         */
+        std::list<std::pair<item *, bool>> items_cache;
+        std::list<tripoint> unreachable_src_abs_points;
+
+    public:
+        move_loot_activity_actor() = default;
+
+        activity_id get_type() const override {
+            return activity_id( "ACT_MOVE_LOOT" );
+        }
+
+        void start( player_activity &act, Character &who ) override;
+        void do_turn( player_activity &act, Character &who ) override;
+        void finish( player_activity &act, Character &who ) override ;
+        void canceled( player_activity &act, Character &who ) override;
+
+        std::unique_ptr<activity_actor> clone() const override {
+            return std::make_unique<move_loot_activity_actor>( *this );
+        }
         void serialize( JsonOut &jsout ) const override;
         static std::unique_ptr<activity_actor> deserialize( JsonIn &jsin );
 };

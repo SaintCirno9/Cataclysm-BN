@@ -11,6 +11,7 @@
 
 #include "optional.h"
 #include "type_id.h"
+#include "vehicle.h"
 
 class Character;
 class inventory;
@@ -21,7 +22,7 @@ struct tripoint;
 
 std::vector<tripoint> get_sorted_tiles_by_distance( const tripoint &abspos,
         const std::unordered_set<tripoint> &tiles );
-std::vector<tripoint> route_adjacent( const player &p, const tripoint &dest );
+std::vector<tripoint> route_adjacent( const Character &p, const tripoint &dest );
 
 enum requirement_check_result : int {
     SKIP_LOCATION = 0,
@@ -115,7 +116,6 @@ int butcher_time_to_cut( const inventory &inv, const item &corpse_item, butcher_
 
 // activity_item_handling.cpp
 void activity_on_turn_drop();
-void activity_on_turn_move_loot( player_activity &act, player &p );
 //return true if there is an activity that can be done potentially, return false if no work can be found.
 bool generic_multi_activity_handler( player_activity &act, player &p, bool check_only = false );
 void activity_on_turn_fetch( player_activity &, player *p );
@@ -135,6 +135,10 @@ void put_into_vehicle_or_drop( Character &c, item_drop_reason, const std::list<i
                                const tripoint &where, bool force_ground = false );
 void drop_on_map( Character &c, item_drop_reason reason, const std::list<item> &items,
                   const tripoint &where );
+
+void move_item( Character &p, item &it, const int quantity, const tripoint &src,
+                const tripoint &dest, vehicle *src_veh, int src_part,
+                const activity_id &activity_to_restore = activity_id::NULL_ID() );
 
 namespace activity_handlers
 {
@@ -171,7 +175,6 @@ void vehicle_deconstruction_do_turn( player_activity *act, player *p );
 void vehicle_repair_do_turn( player_activity *act, player *p );
 void chop_trees_do_turn( player_activity *act, player *p );
 void fetch_do_turn( player_activity *act, player *p );
-void move_loot_do_turn( player_activity *act, player *p );
 void travel_do_turn( player_activity *act, player *p );
 void adv_inventory_do_turn( player_activity *act, player *p );
 void armor_layers_do_turn( player_activity *act, player *p );

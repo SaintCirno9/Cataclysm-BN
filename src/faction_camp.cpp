@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "activity_handlers.h"
+#include "activity_actor_definitions.h"
 #include "avatar.h"
 #include "basecamp.h"
 #include "calendar.h"
@@ -79,8 +80,6 @@
 #include "weighted_list.h"
 
 class character_id;
-
-static const activity_id ACT_MOVE_LOOT( "ACT_MOVE_LOOT" );
 
 static const itype_id itype_fungal_seeds( "fungal_seeds" );
 static const itype_id itype_log( "log" );
@@ -1897,7 +1896,7 @@ void basecamp::start_menial_labor()
     }
     validate_sort_points();
 
-    comp->assign_activity( ACT_MOVE_LOOT );
+    comp->assign_activity( player_activity( move_loot_activity_actor() ) );
     popup( _( "%s goes off to clean toilets and sort loot." ), comp->disp_name() );
 }
 
