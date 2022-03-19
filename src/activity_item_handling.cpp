@@ -2874,6 +2874,7 @@ bool find_auto_consume( player &p, const bool food )
     if( g->m.check_vehicle_zones( g->get_levz() ) ) {
         mgr.cache_vzones();
     }
+    mgr.cache_pzones();
     const std::unordered_set<tripoint> &dest_set = mgr.get_near( consume_type_zone, g->m.getabs( pos ),
             ACTIVITY_SEARCH_DISTANCE );
     if( dest_set.empty() ) {

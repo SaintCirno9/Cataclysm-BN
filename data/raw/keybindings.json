@@ -2529,6 +2529,13 @@
   },
   {
     "type": "keybinding",
+    "id": "TOGGLE_PERSONAL_ZONE",
+    "category": "ZONES_MANAGER",
+    "name": "Toggle personal zone",
+    "bindings": [ { "input_method": "keyboard", "key": "p" }, { "input_method": "keyboard", "key": "P" } ]
+  },
+  {
+    "type": "keybinding",
     "id": "PAGE_DOWN",
     "category": "ADVANCED_INVENTORY",
     "name": "Page down",

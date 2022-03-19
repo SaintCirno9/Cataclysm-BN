@@ -243,6 +243,7 @@ class zone_data
         bool invert;
         bool enabled;
         bool is_vehicle;
+        bool is_personal;
         tripoint start;
         tripoint end;
         shared_ptr_fast<zone_options> options;
@@ -253,6 +254,7 @@ class zone_data
             invert = false;
             enabled = false;
             is_vehicle = false;
+            is_personal = false;
             start = tripoint_zero;
             end = tripoint_zero;
             options = nullptr;
@@ -268,6 +270,7 @@ class zone_data
             invert = _invert;
             enabled = _enabled;
             is_vehicle = false;
+            is_personal = false;
             start = _start;
             end = _end;
 
@@ -286,6 +289,7 @@ class zone_data
         void set_position( const std::pair<tripoint, tripoint> &position, bool manual = true );
         void set_enabled( bool enabled_arg );
         void set_is_vehicle( bool is_vehicle_arg );
+        void toggle_personal();
 
         static std::string make_type_hash( const zone_type_id &_type, const faction_id &_fac ) {
             return _type.c_str() + type_fac_hash_str + _fac.c_str();
@@ -318,12 +322,12 @@ class zone_data
         bool get_is_vehicle() const {
             return is_vehicle;
         }
-        tripoint get_start_point() const {
-            return start;
+        bool get_is_personal() const {
+            return is_personal;
         }
-        tripoint get_end_point() const {
-            return end;
-        }
+
+        tripoint get_start_point() const;
+        tripoint get_end_point() const;
         tripoint get_center_point() const;
         bool has_options() const {
             return options->has_options();
@@ -334,11 +338,7 @@ class zone_data
         zone_options &get_options() {
             return *options;
         }
-        bool has_inside( const tripoint &p ) const {
-            return p.x >= start.x && p.x <= end.x &&
-                   p.y >= start.y && p.y <= end.y &&
-                   p.z >= start.z && p.z <= end.z;
-        }
+        bool has_inside( const tripoint &p ) const;
         void serialize( JsonOut &json ) const;
         void deserialize( JsonIn &jsin );
 };
@@ -361,12 +361,6 @@ class zone_manager
         std::vector<zone_data> removed_vzones;
 
         std::map<zone_type_id, zone_type> types;
-        std::unordered_map<std::string, std::unordered_set<tripoint>> area_cache;
-        std::unordered_map<std::string, std::unordered_set<tripoint>> vzone_cache;
-        std::unordered_set<tripoint> get_point_set( const zone_type_id &type,
-                const faction_id &fac = your_fac ) const;
-        std::unordered_set<tripoint> get_vzone_set( const zone_type_id &type,
-                const faction_id &fac = your_fac ) const;
 
         /**
          * Cache to store all zones (map zones and vehicle zones)
@@ -408,6 +402,7 @@ class zone_manager
         bool has_type( const zone_type_id &type ) const;
         bool has_defined( const zone_type_id &type, const faction_id &fac = your_fac ) const;
         void cache_data();
+        void cache_pzones();
         void cache_vzones();
         bool has( const zone_type_id &type, const tripoint &where,
                   const faction_id &fac = your_fac ) const;

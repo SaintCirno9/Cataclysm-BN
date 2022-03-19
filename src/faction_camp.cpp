@@ -652,6 +652,7 @@ void talk_function::basecamp_mission( npc &p )
         if( g->m.check_vehicle_zones( g->get_levz() ) ) {
             mgr.cache_vzones();
         }
+        mgr.cache_pzones();
         tripoint src_loc;
         const auto abspos = p.global_square_location();
         if( mgr.has_near( zone_type_camp_storage, abspos, 60 ) ) {
@@ -3585,6 +3586,7 @@ bool basecamp::validate_sort_points()
     if( g->m.check_vehicle_zones( g->get_levz() ) ) {
         mgr.cache_vzones();
     }
+    mgr.cache_pzones();
     tripoint src_loc = g->m.getlocal( bb_pos ) + point_north;
     const tripoint abspos = g->m.getabs( g->u.pos() );
     if( !mgr.has_near( zone_type_camp_storage, abspos, 60 ) ||
@@ -3890,6 +3892,7 @@ bool basecamp::distribute_food()
     if( g->m.check_vehicle_zones( g->get_levz() ) ) {
         mgr.cache_vzones();
     }
+    mgr.cache_pzones();
     const tripoint &abspos = get_dumping_spot();
     const std::unordered_set<tripoint> &z_food = mgr.get_near( zone_type_camp_food, abspos, 60 );
 
@@ -3979,6 +3982,7 @@ void basecamp::place_results( item result )
         if( g->m.check_vehicle_zones( g->get_levz() ) ) {
             mgr.cache_vzones();
         }
+        mgr.cache_pzones();
         const auto abspos = g->m.getabs( g->u.pos() );
         if( mgr.has_near( zone_type_camp_storage, abspos ) ) {
             const auto &src_set = mgr.get_near( zone_type_camp_storage, abspos );

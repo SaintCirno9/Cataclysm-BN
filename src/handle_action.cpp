@@ -1100,7 +1100,10 @@ static void loot()
     // Manually update vehicle cache.
     // In theory this would be handled by the related activity actor move_loot_activity_actor()
     // but with a stale cache we never get that far.
-    mgr.cache_vzones();
+    if( g->m.check_vehicle_zones( g->get_levz() ) ) {
+            mgr.cache_vzones();
+        }
+    mgr.cache_pzones();
 
     flags |= g->check_near_zone( zone_type_id( "LOOT_UNSORTED" ), u.pos() ) ? SortLoot : 0;
     if( g->check_near_zone( zone_type_id( "FARM_PLOT" ), u.pos() ) ) {

@@ -6295,6 +6295,10 @@ static void zones_manager_shortcuts( const catacurses::window &w_info )
                             _( "<S>how all / hide distant" ) ) + 2;
     shortcut_print( w_info, point( tmpx, 3 ), c_white, c_light_green, _( "<M>ap" ) );
 
+    tmpx = 1;
+    shortcut_print( w_info, point( tmpx, 4 ), c_white, c_light_green,
+                    _( "Toggle <P>ersonal zone" ) );
+
     wnoutrefresh( w_info );
 }
 
@@ -6346,7 +6350,7 @@ void game::zones_manager()
 
     u.view_offset = tripoint_zero;
 
-    const int zone_ui_height = 12;
+    const int zone_ui_height = 13;
     const int zone_options_height = 7;
 
     const int width = 45;
@@ -6400,6 +6404,7 @@ void game::zones_manager()
     ctxt.register_action( "ENABLE_ZONE" );
     ctxt.register_action( "DISABLE_ZONE" );
     ctxt.register_action( "SHOW_ALL_ZONES" );
+    ctxt.register_action( "TOGGLE_PERSONAL_ZONE" );
     ctxt.register_action( "HELP_KEYBINDINGS" );
 
     auto &mgr = zone_manager::get_manager();
@@ -6561,6 +6566,10 @@ void game::zones_manager()
                     //Draw Vehicle Indicator
                     mvwprintz( w_zones, point( 41, iNum - start_index ), colorLine,
                                zone.get_is_vehicle() ? "*" : "" );
+
+                    //Draw Personal Indicator
+                    mvwprintz( w_zones, point( 42, iNum - start_index ), colorLine,
+                               zone.get_is_personal() ? "P" : "" );
                 }
                 iNum++;
             }
@@ -6643,6 +6652,15 @@ void game::zones_manager()
                 blink = false;
                 stuff_changed = true;
 
+            } else if( action == "TOGGLE_PERSONAL_ZONE" ) {
+                auto &zone = zones[active_index].get();
+                if( zone.get_is_vehicle() ) {
+                    popup( _( "You can't toggle personal for vehicle zone." ) );
+                } else {
+                    zone.toggle_personal();
+                    stuff_changed = true;
+                }
+                blink = false;
             } else if( action == "CONFIRM" ) {
                 auto &zone = zones[active_index].get();
 
@@ -6792,8 +6810,6 @@ void game::zones_manager()
         } else {
             zones.load_zones();
         }
-
-        zones.cache_data();
     }
 
     u.view_offset = stored_view_offset;

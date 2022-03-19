@@ -612,6 +612,7 @@ void basecamp::form_crafting_inventory( map &target_map )
     if( g->m.check_vehicle_zones( g->get_levz() ) ) {
         mgr.cache_vzones();
     }
+    mgr.cache_pzones();
     if( mgr.has_near( zone_type_camp_storage, dump_spot, 60 ) ) {
         std::unordered_set<tripoint> src_set = mgr.get_near( zone_type_camp_storage, dump_spot, 60 );
         _inv.form_from_zone( target_map, src_set, nullptr, false );

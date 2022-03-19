@@ -1064,6 +1064,7 @@ void move_loot_activity_actor::start( player_activity &act, Character &who )
     if( g->m.check_vehicle_zones( g->get_levz() ) ) {
         mgr.cache_vzones();
     }
+    mgr.cache_pzones();
 
     // get all src zone tripoints, do not search the z level
     auto unsorted_zone_tripoints_set = mgr.get_near( zone_LOOT_UNSORTED, abspos,
