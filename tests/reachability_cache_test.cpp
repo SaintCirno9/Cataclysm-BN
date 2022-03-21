@@ -51,11 +51,6 @@ static void test_reachability( std::vector<std::string> setup, bool up )
 
             rejected_cnt += !r_cache_sees;
 
-            INFO( "F — from, T — to" );
-            INFO( map_test_case_common::printers::format_2d_array(
-            t.map_tiles_str( [&]( map_test_case::tile t, std::ostream & s ) {
-                s << ( t.p.xy() == src.xy() ? 'F' : t.p.xy() == dest.xy() ? 'T' : t.setup_c );
-            } ) ) );
             CAPTURE( src, dest, map_sees, r_cache_sees );
             // when map_sees==true, r_cache_sees should be true,
             // but when !map_sees, r_cache_sees is allowed be false or true
