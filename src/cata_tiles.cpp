@@ -1146,11 +1146,12 @@ void cata_tiles::draw( const point &dest, const tripoint &center, int width, int
     const int min_row = 0;
     const int max_row = s.y;
 
+    avatar &you = get_avatar();
     //limit the render area to maximum view range (121x121 square centered on player)
-    const int min_visible_x = g->u.posx() % SEEX;
-    const int min_visible_y = g->u.posy() % SEEY;
-    const int max_visible_x = ( g->u.posx() % SEEX ) + ( MAPSIZE - 1 ) * SEEX;
-    const int max_visible_y = ( g->u.posy() % SEEY ) + ( MAPSIZE - 1 ) * SEEY;
+    const int min_visible_x = you.posx() % SEEX;
+    const int min_visible_y = you.posy() % SEEY;
+    const int max_visible_x = ( you.posx() % SEEX ) + ( MAPSIZE - 1 ) * SEEX;
+    const int max_visible_y = ( you.posy() % SEEY ) + ( MAPSIZE - 1 ) * SEEY;
 
     const auto &ch = g->m.access_cache( center.z );
 
@@ -1165,7 +1166,7 @@ void cata_tiles::draw( const point &dest, const tripoint &center, int width, int
                                  std::max( s.x + o.x, max_visible_x ),
                                  std::max( s.y + o.y, max_visible_y )
                              );
-    g->u.prepare_map_memory_region(
+    you.prepare_map_memory_region(
         g->m.getabs( tripoint( min_mm_reg, center.z ) ),
         g->m.getabs( tripoint( max_mm_reg, center.z ) )
     );
@@ -1180,7 +1181,7 @@ void cata_tiles::draw( const point &dest, const tripoint &center, int width, int
     }
 
     //retrieve night vision goggle status once per draw
-    auto vision_cache = g->u.get_vision_modes();
+    auto vision_cache = you.get_vision_modes();
     nv_goggles_activated = vision_cache[NV_GOGGLES];
 
     // check that the creature for which we'll draw the visibility map is still alive at that point
@@ -1383,7 +1384,7 @@ void cata_tiles::draw( const point &dest, const tripoint &center, int width, int
             if( !invisible[0] && apply_vision_effects( pos, here.get_visibility( ll, cache ) ) ) {
                 const Creature *critter = g->critter_at( pos, true );
                 if( has_draw_override( pos ) || has_memory_at( pos ) ||
-                    ( critter && ( g->u.sees_with_infrared( *critter ) || g->u.sees_with_specials( *critter ) ) ) ) {
+                    ( critter && ( you.sees_with_infrared( *critter ) || you.sees_with_specials( *critter ) ) ) ) {
 
                     invisible[0] = true;
                 } else {
@@ -1552,16 +1553,16 @@ void cata_tiles::draw( const point &dest, const tripoint &center, int width, int
         if( do_draw_cone_aoe ) {
             draw_cone_aoe_frame();
         }
-    } else if( g->u.view_offset != tripoint_zero && !g->u.in_vehicle ) {
+    } else if( you.view_offset != tripoint_zero && !you.in_vehicle ) {
         // check to see if player is located at ter
         draw_from_id_string( "cursor", C_NONE, empty_string,
                              tripoint( g->ter_view_p.xy(), center.z ), 0, 0, lit_level::LIT,
                              false );
     }
-    if( g->u.controlling_vehicle ) {
+    if( you.controlling_vehicle ) {
         if( cata::optional<tripoint> indicator_offset = g->get_veh_dir_indicator_location( true ) ) {
-            draw_from_id_string( "cursor", C_NONE, empty_string, indicator_offset->xy() + tripoint( g->u.posx(),
-                                 g->u.posy(), center.z ),
+            draw_from_id_string( "cursor", C_NONE, empty_string, indicator_offset->xy() + tripoint( you.posx(),
+                                 you.posy(), center.z ),
                                  0, 0, lit_level::LIT, false );
         }
     }
