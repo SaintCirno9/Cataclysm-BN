@@ -1389,6 +1389,11 @@ class Character : public Creature, public visitable<Character>
         ret_val<bool> can_unwield( const item &it ) const;
 
         void drop_invalid_inventory();
+        // this cache is for checking if items in the character's inventory can't actually fit into other items they are inside of
+        void invalidate_inventory_validity_cache();
+
+        void invalidate_carried_weight_cache();
+
         /** Returns all items that must be taken off before taking off this item */
         std::list<item *> get_dependent_worn_items( const item &it );
         /** Drops an item to the specified location */
@@ -2121,6 +2126,7 @@ class Character : public Creature, public visitable<Character>
         m_size size_class = MS_MEDIUM;
 
         trap_map known_traps;
+        mutable std::pair<bool, units::mass> carried_weight_cache;
         std::array<encumbrance_data, num_bp> encumbrance_cache;
         mutable std::map<std::string, double> cached_info;
         bool bio_soporific_powered_at_last_sleep_check = false;

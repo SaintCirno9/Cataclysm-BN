@@ -2327,6 +2327,7 @@ item &Character::i_add( item it, bool should_stack )
     auto &item_in_inv = inv.add_item( it, keep_invlet, true, should_stack );
     item_in_inv.on_pickup( *this );
     cached_info.erase( "reloadables" );
+    invalidate_carried_weight_cache();
     return item_in_inv;
 }
 
@@ -2409,6 +2410,8 @@ int Character::get_item_position( const item *it ) const
 
 item Character::i_rem( int pos )
 {
+    invalidate_carried_weight_cache();
+
     item tmp;
     if( pos == -1 ) {
         tmp = weapon;
@@ -2427,6 +2430,8 @@ item Character::i_rem( int pos )
 
 item Character::i_rem( const item *it )
 {
+    invalidate_carried_weight_cache();
+
     auto tmp = remove_items_with( [&it]( const item & i ) {
         return &i == it;
     }, 1 );
@@ -2725,10 +2730,19 @@ int Character::best_nearby_lifting_assist( const tripoint &world_pos ) const
                      } );
 }
 
+void Character::invalidate_carried_weight_cache()
+{
+    if( !carried_weight_cache.first ) {
+        return;
+    }
+    carried_weight_cache = std::make_pair( false, 0_gram );
+}
+
 units::mass Character::weight_carried_reduced_by( const excluded_stacks &without ) const
 {
-    const std::map<const item *, int> empty;
-
+    if( carried_weight_cache.first ) {
+        return carried_weight_cache.second;
+    }
     // Worn items
     units::mass ret = 0_gram;
     for( auto &i : worn ) {
@@ -2769,7 +2783,7 @@ units::mass Character::weight_carried_reduced_by( const excluded_stacks &without
     } else {
         ret += weaponweight;
     }
-
+    carried_weight_cache = std::make_pair( true, ret );
     return ret;
 }
 
