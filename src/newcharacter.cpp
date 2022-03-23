@@ -2789,12 +2789,33 @@ std::vector<trait_id> Character::get_base_traits() const
     return std::vector<trait_id>( my_traits.begin(), my_traits.end() );
 }
 
+void Character::invalidate_mutation_cache()
+{
+    if( !mutation_cache.first ) {
+        return;
+    }
+
+    mutation_cache.first = false;
+    mutation_cache.second.clear();
+}
+
 std::vector<trait_id> Character::get_mutations( bool include_hidden ) const
 {
     std::vector<trait_id> result;
-    for( const std::pair<const trait_id, trait_data> &t : my_mutations ) {
-        if( include_hidden || t.first.obj().player_display ) {
-            result.push_back( t.first );
+    if( !mutation_cache.first ) {
+        for( const std::pair<const trait_id, trait_data> &t : my_mutations ) {
+            mutation_cache.second.emplace_back( t.first );
+        }
+        mutation_cache.first = true;
+    }
+    result = mutation_cache.second;
+    if( !include_hidden ) {
+        for( auto iter = result.begin(); iter != result.end(); ) {
+            if( !iter->obj().player_display ) {
+                iter = result.erase( iter );
+            } else {
+                ++iter;
+            }
         }
     }
     for( const trait_id &ench_trait : enchantment_cache->get_mutations() ) {

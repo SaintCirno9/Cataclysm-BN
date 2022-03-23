@@ -169,6 +169,7 @@ void Character::set_mutation( const trait_id &trait )
     mutation_effect( trait );
     recalc_sight_limits();
     invalidate_mut_cbm_encumb_cache();
+    invalidate_mutation_cache();
     reset_encumbrance();
 }
 
@@ -187,6 +188,7 @@ void Character::unset_mutation( const trait_id &trait_ )
     mutation_loss_effect( trait );
     recalc_sight_limits();
     invalidate_mut_cbm_encumb_cache();
+    invalidate_mutation_cache();
     reset_encumbrance();
 }
 

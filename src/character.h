@@ -1416,6 +1416,7 @@ class Character : public Creature, public visitable<Character>
         void invalidate_carried_weight_cache();
         void invalidate_mut_cbm_encumb_cache();
         void invalidate_item_encumbe_cache();
+        void invalidate_mutation_cache();
 
         /** Returns all items that must be taken off before taking off this item */
         std::list<item *> get_dependent_worn_items( const item &it );
@@ -2166,6 +2167,7 @@ class Character : public Creature, public visitable<Character>
          * contains the entry, the character has the mutation.
          */
         std::unordered_map<trait_id, trait_data> my_mutations;
+        mutable std::pair<bool, std::vector<trait_id>> mutation_cache;
         /**
          * Contains mutation ids of the base traits.
          */
