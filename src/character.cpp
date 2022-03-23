@@ -3527,12 +3527,16 @@ bool Character::has_nv()
 
 void Character::reset_encumbrance()
 {
-    encumbrance_cache = calc_encumbrance();
-}
-
-std::array<encumbrance_data, num_bp> Character::calc_encumbrance() const
-{
-    return calc_encumbrance( item() );
+    std::array<encumbrance_data, num_bp> &mcenc = mut_cbm_encumb();
+    std::array<encumbrance_data, num_bp> &ienc = item_encumb();
+    std::array<encumbrance_data, num_bp> &enc = encumbrance_cache;
+    for( int i = 0; i < num_bp; ++i ) {
+        enc[i].encumbrance = mcenc[i].encumbrance + ienc[i].encumbrance;
+        enc[i].armor_encumbrance = mcenc[i].armor_encumbrance + ienc[i].armor_encumbrance;
+        enc[i].layer_penalty = mcenc[i].layer_penalty + ienc[i].layer_penalty;
+    }
+    bool euqal = &enc == &encumbrance_cache;
+    add_msg( m_info, "encumbrance_cache %s equal to enc", euqal ? "is" : "isn't" );
 }
 
 std::array<encumbrance_data, num_bp> Character::calc_encumbrance( const item &new_item ) const
@@ -3837,21 +3841,14 @@ void Character::invalidate_item_encumbe_cache()
     item_encumb_cache = std::make_pair( false, std::array<encumbrance_data, num_bp>() );
 }
 
-std::array<encumbrance_data, num_bp> &Character::item_encumb( const item &new_item ) const
+std::array<encumbrance_data, num_bp> Character::item_encumb( const item &new_item ) const
 {
-    if( item_encumb_cache.first ) {
-        return item_encumb_cache.second;
+    std::array<encumbrance_data, num_bp> vals = item_encumb();
+    if( new_item.is_null() ) {
+        return vals;
     }
-    std::array<encumbrance_data, num_bp> vals;
-
-    // Figure out where new_item would be worn
-    std::list<item>::const_iterator new_item_position = worn.end();
-    if( !new_item.is_null() ) {
-        // const_cast required to work around g++-4.8 library bug
-        // see the commit that added this comment to understand why
-        new_item_position =
-            const_cast<Character *>( this )->position_to_wear_new_item( new_item );
-    }
+    std::list<item>::const_iterator new_item_position = const_cast<Character *>
+            ( this )->position_to_wear_new_item( new_item );
 
     // Track highest layer observed so far so we can penalize out-of-order
     // items
@@ -3860,16 +3857,7 @@ std::array<encumbrance_data, num_bp> &Character::item_encumb( const item &new_it
                PERSONAL_LAYER );
 
     const bool power_armored = is_wearing_active_power_armor();
-    for( auto w_it = worn.begin(); w_it != worn.end(); ++w_it ) {
-        if( w_it == new_item_position ) {
-            layer_item( vals, new_item, highest_layer_so_far, power_armored, *this );
-        }
-        layer_item( vals, *w_it, highest_layer_so_far, power_armored, *this, true );
-    }
-
-    if( worn.end() == new_item_position && !new_item.is_null() ) {
-        layer_item( vals, new_item, highest_layer_so_far, power_armored, *this );
-    }
+    layer_item( vals, new_item, highest_layer_so_far, power_armored, *this );
 
     // make sure values are sane
     for( const body_part bp : all_body_parts ) {
@@ -3880,9 +3868,39 @@ std::array<encumbrance_data, num_bp> &Character::item_encumb( const item &new_it
         // Add armor and layering penalties for the final values
         elem.encumbrance += elem.armor_encumbrance + elem.layer_penalty;
     }
+    return vals;
+}
 
-    item_encumb_cache = std::make_pair( true, vals );
-    return item_encumb_cache.second;
+std::array<encumbrance_data, num_bp> &Character::item_encumb() const
+{
+    std::array<encumbrance_data, num_bp> &vals = item_encumb_cache.second;
+
+    if( item_encumb_cache.first ) {
+        return vals;
+    }
+
+    // Track highest layer observed so far so we can penalize out-of-order
+    // items
+    std::array<layer_level, num_bp> highest_layer_so_far;
+    std::fill( highest_layer_so_far.begin(), highest_layer_so_far.end(),
+               PERSONAL_LAYER );
+
+    const bool power_armored = is_wearing_active_power_armor();
+    for( auto w_it = worn.begin(); w_it != worn.end(); ++w_it ) {
+        layer_item( vals, *w_it, highest_layer_so_far, power_armored, *this, true );
+    }
+    // make sure values are sane
+    for( const body_part bp : all_body_parts ) {
+        encumbrance_data &elem = vals[bp];
+
+        elem.armor_encumbrance = std::max( 0, elem.armor_encumbrance );
+
+        // Add armor and layering penalties for the final values
+        elem.encumbrance += elem.armor_encumbrance + elem.layer_penalty;
+    }
+
+    item_encumb_cache.first = true;
+    return vals;
 }
 
 int Character::encumb( body_part bp ) const
@@ -3915,10 +3933,12 @@ void Character::invalidate_mut_cbm_encumb_cache()
 
 std::array<encumbrance_data, num_bp> &Character::mut_cbm_encumb() const
 {
-    std::array<encumbrance_data, num_bp> vals;
+    std::array<encumbrance_data, num_bp> &vals = mut_cbm_encumb_cache.second;
+
     if( mut_cbm_encumb_cache.first ) {
-        return mut_cbm_encumb_cache.second;
+        return vals;
     }
+
     for( const bionic_id &bid : get_bionics() ) {
         for( const std::pair<const bodypart_str_id, int> &element : bid->encumbrance ) {
             vals[element.first->token].encumbrance += element.second;
@@ -3937,8 +3957,8 @@ std::array<encumbrance_data, num_bp> &Character::mut_cbm_encumb() const
     for( const trait_id &mut : get_mutations() ) {
         apply_mut_encumbrance( vals, mut, oversize );
     }
-    mut_cbm_encumb_cache = std::make_pair( true, vals );
-    return mut_cbm_encumb_cache.second;
+    mut_cbm_encumb_cache.first = true;
+    return vals;
 }
 
 body_part_set Character::exclusive_flag_coverage( const std::string &flag ) const
@@ -9594,7 +9614,6 @@ void Character::on_item_wear( const item &it )
     for( const trait_id &mut : it.mutations_from_wearing( *this ) ) {
         mutation_effect( mut );
         recalc_sight_limits();
-        calc_encumbrance();
 
         // If the stamina is higher than the max (Languorous), set it back to max
         if( get_stamina() > get_stamina_max() ) {
@@ -9611,7 +9630,6 @@ void Character::on_item_takeoff( const item &it )
     for( const trait_id &mut : it.mutations_from_wearing( *this ) ) {
         mutation_loss_effect( mut );
         recalc_sight_limits();
-        calc_encumbrance();
         if( get_stamina() > get_stamina_max() ) {
             set_stamina( get_stamina_max() );
         }
