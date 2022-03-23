@@ -3539,9 +3539,8 @@ std::array<encumbrance_data, num_bp> Character::calc_encumbrance( const item &ne
 {
 
     std::array<encumbrance_data, num_bp> enc;
-
-    item_encumb( enc, new_item );
     mut_cbm_encumb( enc );
+    item_encumb( enc, new_item );
 
     return enc;
 }
@@ -3908,9 +3907,20 @@ static void apply_mut_encumbrance( std::array<encumbrance_data, num_bp> &vals,
     }
 }
 
+void Character::invalidate_mut_cbm_encumb_cache()
+{
+    if( !mut_cbm_encumb_cache.first ) {
+        return;
+    }
+    mut_cbm_encumb_cache = std::make_pair( false, std::array<encumbrance_data, num_bp>() );
+}
+
 void Character::mut_cbm_encumb( std::array<encumbrance_data, num_bp> &vals ) const
 {
-
+    if( mut_cbm_encumb_cache.first ) {
+        vals = mut_cbm_encumb_cache.second;
+        return;
+    }
     for( const bionic_id &bid : get_bionics() ) {
         for( const std::pair<const bodypart_str_id, int> &element : bid->encumbrance ) {
             vals[element.first->token].encumbrance += element.second;
@@ -3929,6 +3939,7 @@ void Character::mut_cbm_encumb( std::array<encumbrance_data, num_bp> &vals ) con
     for( const trait_id &mut : get_mutations() ) {
         apply_mut_encumbrance( vals, mut, oversize );
     }
+    mut_cbm_encumb_cache = std::make_pair( true, vals );
 }
 
 body_part_set Character::exclusive_flag_coverage( const std::string &flag ) const

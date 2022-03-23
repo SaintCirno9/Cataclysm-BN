@@ -1393,6 +1393,7 @@ class Character : public Creature, public visitable<Character>
         void invalidate_inventory_validity_cache();
 
         void invalidate_carried_weight_cache();
+        void invalidate_mut_cbm_encumb_cache();
 
         /** Returns all items that must be taken off before taking off this item */
         std::list<item *> get_dependent_worn_items( const item &it );
@@ -2127,6 +2128,7 @@ class Character : public Creature, public visitable<Character>
 
         trap_map known_traps;
         mutable std::pair<bool, units::mass> carried_weight_cache;
+        mutable std::pair<bool, std::array<encumbrance_data, num_bp>> mut_cbm_encumb_cache;
         std::array<encumbrance_data, num_bp> encumbrance_cache;
         mutable std::map<std::string, double> cached_info;
         bool bio_soporific_powered_at_last_sleep_check = false;

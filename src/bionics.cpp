@@ -2519,7 +2519,7 @@ void Character::add_bionic( const bionic_id &b )
             known_spell.set_level( spell_pair.second );
         }
     }
-
+    invalidate_mut_cbm_encumb_cache();
     reset_encumbrance();
     recalc_sight_limits();
     if( !b->enchantments.empty() ) {
@@ -2557,6 +2557,7 @@ void Character::remove_bionic( const bionic_id &b )
     }
 
     *my_bionics = new_my_bionics;
+    invalidate_mut_cbm_encumb_cache();
     reset_encumbrance();
     recalc_sight_limits();
     if( !b->enchantments.empty() ) {
