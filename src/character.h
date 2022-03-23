@@ -887,7 +887,7 @@ class Character : public Creature, public visitable<Character>
         std::array<encumbrance_data, num_bp> calc_encumbrance( const item &new_item ) const;
 
         /** Get encumbrance from mutations and bionics only */
-        std::array<encumbrance_data, num_bp> mut_cbm_encumb() const;
+        std::array<encumbrance_data, num_bp> &mut_cbm_encumb() const;
 
         /** Return the position in the worn list where new_item would be
          * put by default */
@@ -918,7 +918,7 @@ class Character : public Creature, public visitable<Character>
          * @param new_item The item that is being considered to be put on, or nullptr if none.
          * @return std::array<encumbrance_data, num_bp> encumbrance values for each body part with the new item added.
          */
-        std::array<encumbrance_data, num_bp> item_encumb( const item &new_item ) const;
+        std::array<encumbrance_data, num_bp> &item_encumb( const item &new_item ) const;
 
         std::array<std::array<int, NUM_WATER_TOLERANCE>, num_bp> mut_drench;
 

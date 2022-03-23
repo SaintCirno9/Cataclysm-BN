@@ -3537,8 +3537,8 @@ std::array<encumbrance_data, num_bp> Character::calc_encumbrance() const
 
 std::array<encumbrance_data, num_bp> Character::calc_encumbrance( const item &new_item ) const
 {
-    std::array<encumbrance_data, num_bp> mcenc = mut_cbm_encumb();
-    std::array<encumbrance_data, num_bp> ienc = item_encumb( new_item );
+    std::array<encumbrance_data, num_bp> &mcenc = mut_cbm_encumb();
+    std::array<encumbrance_data, num_bp> &ienc = item_encumb( new_item );
     std::array<encumbrance_data, num_bp> enc;
     for( int i = 0; i < num_bp; ++i ) {
         enc[i].encumbrance = mcenc[i].encumbrance + ienc[i].encumbrance;
@@ -3837,7 +3837,7 @@ void Character::invalidate_item_encumbe_cache()
     item_encumb_cache = std::make_pair( false, std::array<encumbrance_data, num_bp>() );
 }
 
-std::array<encumbrance_data, num_bp> Character::item_encumb( const item &new_item ) const
+std::array<encumbrance_data, num_bp> &Character::item_encumb( const item &new_item ) const
 {
     if( item_encumb_cache.first ) {
         return item_encumb_cache.second;
@@ -3913,7 +3913,7 @@ void Character::invalidate_mut_cbm_encumb_cache()
     mut_cbm_encumb_cache = std::make_pair( false, std::array<encumbrance_data, num_bp>() );
 }
 
-std::array<encumbrance_data, num_bp> Character::mut_cbm_encumb() const
+std::array<encumbrance_data, num_bp> &Character::mut_cbm_encumb() const
 {
     std::array<encumbrance_data, num_bp> vals;
     if( mut_cbm_encumb_cache.first ) {
