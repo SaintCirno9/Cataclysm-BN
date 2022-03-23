@@ -5521,32 +5521,39 @@ bool item::is_power_armor() const
     return t->power_armor;
 }
 
-int item::get_encumber( const Character &p ) const
+int item::get_encumber( const Character &p, bool skip_is_worn_check ) const
 {
+    if( !skip_is_worn_check && !p.is_worn( *this ) ) {
+        return 0;
+    }
+
+    const islot_armor *t = find_armor_data();
+
+    if( !t || t->max_encumber == 0 ) {
+        return 0;
+    }
 
     units::volume contents_volume( 0_ml );
 
     contents_volume += contents.item_size_modifier();
 
-    if( p.is_worn( *this ) ) {
-        const islot_armor *t = find_armor_data();
+    units::volume char_storage( 0_ml );
 
-        if( t != nullptr && t->max_encumber != 0 ) {
-            units::volume char_storage( 0_ml );
-
-            for( const item &e : p.worn ) {
-                char_storage += e.get_storage();
-            }
-
-            if( char_storage != 0_ml ) {
-                // Cast up to 64 to prevent overflow. Dividing before would prevent this but lose data.
-                contents_volume += units::from_milliliter( static_cast<int64_t>( t->storage.value() ) *
-                                   p.inv.volume().value() / char_storage.value() );
-            }
-        }
+    for( const item &e : p.worn ) {
+        char_storage += e.get_storage();
     }
 
-    return get_encumber_when_containing( p, contents_volume );
+    if( char_storage != 0_ml ) {
+        // Cast up to 64 to prevent overflow. Dividing before would prevent this but lose data.
+        contents_volume += units::from_milliliter( static_cast<int64_t>( t->storage.value() ) *
+                           p.inv.volume().value() / char_storage.value() );
+    }
+    if( contents_volume != contents_volume_cache.first ) {
+        contents_volume_cache = std::make_pair( contents_volume, get_encumber_when_containing( p,
+                                                contents_volume ) );
+    }
+
+    return contents_volume_cache.second;
 }
 
 int item::get_encumber_when_containing(

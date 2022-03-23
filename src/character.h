@@ -886,18 +886,39 @@ class Character : public Creature, public visitable<Character>
         /** Recalculate encumbrance for all body parts as if `new_item` was also worn. */
         std::array<encumbrance_data, num_bp> calc_encumbrance( const item &new_item ) const;
 
-        /** Applies encumbrance from mutations and bionics only */
-        void mut_cbm_encumb( std::array<encumbrance_data, num_bp> &vals ) const;
+        /** Get encumbrance from mutations and bionics only */
+        std::array<encumbrance_data, num_bp> mut_cbm_encumb() const;
 
         /** Return the position in the worn list where new_item would be
          * put by default */
         std::list<item>::iterator position_to_wear_new_item( const item &new_item );
 
-        /** Applies encumbrance from items only
+        /**
+         * Get encumbrance from items only
          * If new_item is not null, then calculate under the asumption that it
-         * is added to existing work items. */
-        void item_encumb( std::array<encumbrance_data, num_bp> &vals,
-                          const item &new_item ) const;
+         * is added to existing work items.
+         *
+         * Encumbrance logic:
+         * Some clothing is intrinsically encumbering, such as heavy jackets, backpacks, body armor, etc.
+         * These simply add their encumbrance value to each body part they cover.
+         * In addition, each article of clothing after the first in a layer imposes an additional penalty.
+         * e.g. one shirt will not encumber you, but two is tight and starts to restrict movement.
+         * Clothes on separate layers don't interact, so if you wear e.g. a light jacket over a shirt,
+         * they're intended to be worn that way, and don't impose a penalty.
+         * The default is to assume that clothes do not fit, clothes that are "fitted" either
+         * reduce the encumbrance penalty by ten, or if that is already 0, they reduce the layering effect.
+         *
+         * Use cases:
+         * What would typically be considered normal "street clothes" should not be considered encumbering.
+         * T-shirt, shirt, jacket on torso/arms, underwear and pants on legs, socks and shoes on feet.
+         * This is currently handled by each of these articles of clothing
+         * being on a different layer and/or body part, therefore accumulating no encumbrance.
+         *
+         *
+         * @param new_item The item that is being considered to be put on, or nullptr if none.
+         * @return std::array<encumbrance_data, num_bp> encumbrance values for each body part with the new item added.
+         */
+        std::array<encumbrance_data, num_bp> item_encumb( const item &new_item ) const;
 
         std::array<std::array<int, NUM_WATER_TOLERANCE>, num_bp> mut_drench;
 
@@ -1394,6 +1415,7 @@ class Character : public Creature, public visitable<Character>
 
         void invalidate_carried_weight_cache();
         void invalidate_mut_cbm_encumb_cache();
+        void invalidate_item_encumbe_cache();
 
         /** Returns all items that must be taken off before taking off this item */
         std::list<item *> get_dependent_worn_items( const item &it );
@@ -2129,6 +2151,7 @@ class Character : public Creature, public visitable<Character>
         trap_map known_traps;
         mutable std::pair<bool, units::mass> carried_weight_cache;
         mutable std::pair<bool, std::array<encumbrance_data, num_bp>> mut_cbm_encumb_cache;
+        mutable std::pair<bool, std::array<encumbrance_data, num_bp>> item_encumb_cache;
         std::array<encumbrance_data, num_bp> encumbrance_cache;
         mutable std::map<std::string, double> cached_info;
         bool bio_soporific_powered_at_last_sleep_check = false;

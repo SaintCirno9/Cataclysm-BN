@@ -1565,7 +1565,7 @@ class item : public visitable<item>
          * player.
          * Returns 0 if this is can not be worn at all.
          */
-        int get_encumber( const Character & ) const;
+        int get_encumber( const Character &, bool skip_is_worn_check = false ) const;
         /**
          * Returns the storage amount (@ref islot_armor::storage) that this item provides when worn.
          * For non-armor it returns 0. The storage amount increases the volume capacity of the
@@ -2213,6 +2213,8 @@ class item : public visitable<item>
         mutable faction_id old_owner = faction_id::NULL_ID();
         int damage_ = 0;
         light_emission light = nolight;
+
+        mutable std::pair<units::volume, int> contents_volume_cache;
 
     public:
         char invlet = 0;      // Inventory letter

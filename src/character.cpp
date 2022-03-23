@@ -3537,11 +3537,14 @@ std::array<encumbrance_data, num_bp> Character::calc_encumbrance() const
 
 std::array<encumbrance_data, num_bp> Character::calc_encumbrance( const item &new_item ) const
 {
-
+    std::array<encumbrance_data, num_bp> mcenc = mut_cbm_encumb();
+    std::array<encumbrance_data, num_bp> ienc = item_encumb( new_item );
     std::array<encumbrance_data, num_bp> enc;
-    mut_cbm_encumb( enc );
-    item_encumb( enc, new_item );
-
+    for( int i = 0; i < num_bp; ++i ) {
+        enc[i].encumbrance = mcenc[i].encumbrance + ienc[i].encumbrance;
+        enc[i].armor_encumbrance = mcenc[i].armor_encumbrance + ienc[i].armor_encumbrance;
+        enc[i].layer_penalty = mcenc[i].layer_penalty + ienc[i].layer_penalty;
+    }
     return enc;
 }
 
@@ -3608,6 +3611,7 @@ bool Character::change_side( item &it, bool interactive )
     }
 
     mod_moves( -250 );
+    invalidate_item_encumbe_cache();
     reset_encumbrance();
 
     return true;
@@ -3630,10 +3634,10 @@ bool Character::change_side( item_location &loc, bool interactive )
 static void layer_item( std::array<encumbrance_data, num_bp> &vals,
                         const item &it,
                         std::array<layer_level, num_bp> &highest_layer_so_far,
-                        bool power_armor, const Character &c )
+                        bool power_armor, const Character &c, bool skip_is_worn_check = false )
 {
     const auto item_layer = it.get_layer();
-    int encumber_val = it.get_encumber( c );
+    int encumber_val = it.get_encumber( c, skip_is_worn_check );
     // For the purposes of layering penalty, set a min of 2 and a max of 10 per item.
     int layering_encumbrance = std::min( 10, std::max( 2, encumber_val ) );
 
@@ -3825,29 +3829,20 @@ std::list<item>::iterator Character::position_to_wear_new_item( const item &new_
            ).base();
 }
 
-/*
- * Encumbrance logic:
- * Some clothing is intrinsically encumbering, such as heavy jackets, backpacks, body armor, etc.
- * These simply add their encumbrance value to each body part they cover.
- * In addition, each article of clothing after the first in a layer imposes an additional penalty.
- * e.g. one shirt will not encumber you, but two is tight and starts to restrict movement.
- * Clothes on separate layers don't interact, so if you wear e.g. a light jacket over a shirt,
- * they're intended to be worn that way, and don't impose a penalty.
- * The default is to assume that clothes do not fit, clothes that are "fitted" either
- * reduce the encumbrance penalty by ten, or if that is already 0, they reduce the layering effect.
- *
- * Use cases:
- * What would typically be considered normal "street clothes" should not be considered encumbering.
- * T-shirt, shirt, jacket on torso/arms, underwear and pants on legs, socks and shoes on feet.
- * This is currently handled by each of these articles of clothing
- * being on a different layer and/or body part, therefore accumulating no encumbrance.
- */
-void Character::item_encumb( std::array<encumbrance_data, num_bp> &vals,
-                             const item &new_item ) const
+void Character::invalidate_item_encumbe_cache()
 {
+    if( !item_encumb_cache.first ) {
+        return;
+    }
+    item_encumb_cache = std::make_pair( false, std::array<encumbrance_data, num_bp>() );
+}
 
-    // reset all layer data
-    vals = std::array<encumbrance_data, num_bp>();
+std::array<encumbrance_data, num_bp> Character::item_encumb( const item &new_item ) const
+{
+    if( item_encumb_cache.first ) {
+        return item_encumb_cache.second;
+    }
+    std::array<encumbrance_data, num_bp> vals;
 
     // Figure out where new_item would be worn
     std::list<item>::const_iterator new_item_position = worn.end();
@@ -3869,7 +3864,7 @@ void Character::item_encumb( std::array<encumbrance_data, num_bp> &vals,
         if( w_it == new_item_position ) {
             layer_item( vals, new_item, highest_layer_so_far, power_armored, *this );
         }
-        layer_item( vals, *w_it, highest_layer_so_far, power_armored, *this );
+        layer_item( vals, *w_it, highest_layer_so_far, power_armored, *this, true );
     }
 
     if( worn.end() == new_item_position && !new_item.is_null() ) {
@@ -3885,6 +3880,9 @@ void Character::item_encumb( std::array<encumbrance_data, num_bp> &vals,
         // Add armor and layering penalties for the final values
         elem.encumbrance += elem.armor_encumbrance + elem.layer_penalty;
     }
+
+    item_encumb_cache = std::make_pair( true, vals );
+    return item_encumb_cache.second;
 }
 
 int Character::encumb( body_part bp ) const
@@ -3915,11 +3913,11 @@ void Character::invalidate_mut_cbm_encumb_cache()
     mut_cbm_encumb_cache = std::make_pair( false, std::array<encumbrance_data, num_bp>() );
 }
 
-void Character::mut_cbm_encumb( std::array<encumbrance_data, num_bp> &vals ) const
+std::array<encumbrance_data, num_bp> Character::mut_cbm_encumb() const
 {
+    std::array<encumbrance_data, num_bp> vals;
     if( mut_cbm_encumb_cache.first ) {
-        vals = mut_cbm_encumb_cache.second;
-        return;
+        return mut_cbm_encumb_cache.second;
     }
     for( const bionic_id &bid : get_bionics() ) {
         for( const std::pair<const bodypart_str_id, int> &element : bid->encumbrance ) {
@@ -3940,6 +3938,7 @@ void Character::mut_cbm_encumb( std::array<encumbrance_data, num_bp> &vals ) con
         apply_mut_encumbrance( vals, mut, oversize );
     }
     mut_cbm_encumb_cache = std::make_pair( true, vals );
+    return mut_cbm_encumb_cache.second;
 }
 
 body_part_set Character::exclusive_flag_coverage( const std::string &flag ) const
@@ -9590,6 +9589,8 @@ void Character::on_worn_item_washed( const item &it )
 
 void Character::on_item_wear( const item &it )
 {
+    invalidate_inventory_validity_cache();
+    invalidate_item_encumbe_cache();
     for( const trait_id &mut : it.mutations_from_wearing( *this ) ) {
         mutation_effect( mut );
         recalc_sight_limits();
@@ -9605,6 +9606,8 @@ void Character::on_item_wear( const item &it )
 
 void Character::on_item_takeoff( const item &it )
 {
+    invalidate_inventory_validity_cache();
+    invalidate_item_encumbe_cache();
     for( const trait_id &mut : it.mutations_from_wearing( *this ) ) {
         mutation_loss_effect( mut );
         recalc_sight_limits();
