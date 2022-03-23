@@ -1414,6 +1414,8 @@ class item : public visitable<item>
         void unset_flags();
         /*@}*/
 
+        void on_flag_changed();
+
         /**Does this item have the specified fault*/
         bool has_fault( const fault_id &fault ) const;
 
@@ -2154,6 +2156,8 @@ class item : public visitable<item>
         const mtype *corpse = nullptr;
         std::string corpse_name;       // Name of the late lamented
         std::set<matec_id> techniques; // item specific techniques
+
+        mutable std::map<std::string, bool> flag_cache;
 
         /**
          * Data for items that represent in-progress crafts.

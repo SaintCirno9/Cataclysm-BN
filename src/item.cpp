@@ -4309,7 +4309,7 @@ void item::on_contents_changed()
     if( is_non_resealable_container() ) {
         convert( type->container->unseals_into );
     }
-
+    on_flag_changed();
     encumbrance_update_ = true;
 }
 
@@ -5056,6 +5056,7 @@ int item::reach_range( const Character &guy ) const
 void item::unset_flags()
 {
     item_tags.clear();
+    on_flag_changed();
 }
 
 bool item::has_fault( const fault_id &fault ) const
@@ -5068,28 +5069,42 @@ bool item::has_own_flag( const std::string &f ) const
     return item_tags.count( f );
 }
 
+void item::on_flag_changed()
+{
+    if( flag_cache.empty() ) {
+        return;
+    }
+    flag_cache.clear();
+}
+
 bool item::has_flag( const std::string &f ) const
 {
+    if( flag_cache.count( f ) ) {
+        return flag_cache[f];
+    }
     bool ret = false;
 
     if( json_flag::get( f ).inherit() ) {
         for( const item *e : is_gun() ? gunmods() : toolmods() ) {
             // gunmods fired separately do not contribute to base gun flags
             if( !e->is_gun() && e->has_flag( f ) ) {
-                return true;
+                ret = true;
+                break;
             }
         }
     }
 
     // other item type flags
-    ret = type->has_flag( f );
-    if( ret ) {
-        return ret;
+    if( !ret && type->has_flag( f ) ) {
+        ret = true;
     }
 
     // now check for item specific flags
-    ret = has_own_flag( f );
-    return ret;
+    if( !ret && has_own_flag( f ) ) {
+        ret = true;
+    }
+    flag_cache[f] = ret;
+    return flag_cache[f];
 }
 
 bool item::has_flag( const flag_str_id &flag ) const
@@ -5100,12 +5115,14 @@ bool item::has_flag( const flag_str_id &flag ) const
 item &item::set_flag( const std::string &flag )
 {
     item_tags.insert( flag );
+    on_flag_changed();
     return *this;
 }
 
 item &item::unset_flag( const std::string &flag )
 {
     item_tags.erase( flag );
+    on_flag_changed();
     return *this;
 }
 
@@ -6760,7 +6777,6 @@ bool item::spill_contents( Character &c )
     }
 
     contents.handle_liquid_or_spill( c );
-    on_contents_changed();
 
     return true;
 }
