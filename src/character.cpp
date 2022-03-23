@@ -3529,14 +3529,11 @@ void Character::reset_encumbrance()
 {
     std::array<encumbrance_data, num_bp> &mcenc = mut_cbm_encumb();
     std::array<encumbrance_data, num_bp> &ienc = item_encumb();
-    std::array<encumbrance_data, num_bp> &enc = encumbrance_cache;
     for( int i = 0; i < num_bp; ++i ) {
-        enc[i].encumbrance = mcenc[i].encumbrance + ienc[i].encumbrance;
-        enc[i].armor_encumbrance = mcenc[i].armor_encumbrance + ienc[i].armor_encumbrance;
-        enc[i].layer_penalty = mcenc[i].layer_penalty + ienc[i].layer_penalty;
+        encumbrance_cache[i].encumbrance = mcenc[i].encumbrance + ienc[i].encumbrance;
+        encumbrance_cache[i].armor_encumbrance = mcenc[i].armor_encumbrance + ienc[i].armor_encumbrance;
+        encumbrance_cache[i].layer_penalty = mcenc[i].layer_penalty + ienc[i].layer_penalty;
     }
-    bool euqal = &enc == &encumbrance_cache;
-    add_msg( m_info, "encumbrance_cache %s equal to enc", euqal ? "is" : "isn't" );
 }
 
 std::array<encumbrance_data, num_bp> Character::calc_encumbrance( const item &new_item ) const
