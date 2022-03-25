@@ -8579,15 +8579,19 @@ void map::update_pathfinding_cache( int zlev ) const
                     if( veh != nullptr ) {
                         cur_value |= PF_VEHICLE;
                     }
-
-                    for( const auto &fld : tile.get_field() ) {
-                        const field_entry &cur = fld.second;
-                        const field_type_id type = cur.get_field_type();
-                        const int field_intensity = cur.get_field_intensity();
-                        if( type.obj().get_dangerous( field_intensity - 1 ) ) {
-                            cur_value |= PF_FIELD;
+                    const field &tile_field = tile.get_field();
+                    if( tile_field.field_count() > 0 ) {
+                        for( const auto &fld : tile_field ) {
+                            const field_entry &cur = fld.second;
+                            const field_type_id &type = fld.first;
+                            const int field_intensity = cur.get_field_intensity();
+                            if( type.obj().get_dangerous( field_intensity - 1 ) ) {
+                                cur_value |= PF_FIELD;
+                                break;
+                            }
                         }
                     }
+
 
                     if( !tile.get_trap_t().is_benign() || !terrain.trap.obj().is_benign() ) {
                         cur_value |= PF_TRAP;
