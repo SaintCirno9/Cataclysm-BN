@@ -3166,6 +3166,13 @@ void cata_tiles::draw_entity_with_overlays( const Character &ch, const tripoint 
     for( const std::string &overlay : overlays ) {
         std::string draw_id = overlay;
         if( find_overlay_looks_like( ch.male, overlay, draw_id ) ) {
+            auto &visible_overlays = const_cast<Character &>( ch ).get_visible_overlays();
+            auto iter = visible_overlays.find( overlay );
+            if( iter != visible_overlays.end() && iter->second ) {
+                continue;
+            } else if( overlay.find( "worn_" ) == 0 || overlay.find( "mutation_" ) == 0 ) {
+                visible_overlays.emplace( overlay, false );
+            }
             int overlay_height_3d = prev_height_3d;
             if( ch.facing == FD_RIGHT ) {
                 draw_from_id_string( draw_id, C_NONE, "", p, corner, /*rota:*/ 0, ll, false, overlay_height_3d );

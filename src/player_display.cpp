@@ -27,6 +27,7 @@
 #include "string_id.h"
 #include "string_input_popup.h"
 #include "translations.h"
+#include "ui.h"
 #include "ui_manager.h"
 #include "units.h"
 #include "units_utility.h"
@@ -1055,6 +1056,59 @@ static bool handle_player_display_action( player &you, unsigned int &line,
 
         you.custom_profession = popup.text();
         ui_tip.invalidate_ui();
+    } else if( action == "TOGGLE_OVERLAY_VISIBILITY" ) {
+        auto &visible_overlays = you.get_visible_overlays();
+        if( !visible_overlays.empty() ) {
+            uilist as_m;
+            as_m.desc_enabled = true;
+            as_m.text = _( "Select overlay:" );
+            for( const auto &overlay : visible_overlays ) {
+                std::string entry_name;
+                if( overlay.first.find( "worn_" ) == 0 ) {
+                    for( const auto &elem : you.worn ) {
+                        if( elem.typeId().str() == overlay.first.substr( 5 ) ) {
+                            entry_name = elem.type_name();
+                            break;
+                        }
+                    }
+                } else if( overlay.first.find( "mutation_" ) == 0 ) {
+                    size_t sub_offset = overlay.first.find( "active_" ) == 9 ? 16 : 9;
+                    for( const auto &mut : you.get_mutations() ) {
+                        if( mut.str() == overlay.first.substr( sub_offset ) ) {
+                            entry_name = mut.obj().name();
+                            break;
+                        }
+                    }
+                    if( entry_name.empty() ) {
+                        for( const auto &bio : you.get_bionics() ) {
+                            if( bio.str() == overlay.first.substr( sub_offset ) ) {
+                                entry_name = bio.obj().name.translated();
+                                break;
+                            }
+                        }
+                    }
+                }
+                if( !entry_name.empty() ) {
+                    as_m.addentry( entry_name );
+                    if( overlay.second ) {
+                        as_m.entries.back().text_color = c_dark_gray;
+                    }
+                }
+            }
+            if( as_m.entries.size() != visible_overlays.size() ) {
+                debugmsg( "Visible overlay list size mismatch" );
+                visible_overlays.clear();
+            } else {
+                as_m.query();
+                if( as_m.ret >= 0 ) {
+                    auto iter = visible_overlays.begin();
+                    std::advance( iter, as_m.ret );
+                    iter->second = !iter->second;
+                }
+            }
+        } else {
+            popup( _( "No overlays are currently visible." ) );
+        }
     }
     return done;
 }
@@ -1224,6 +1278,7 @@ void player::disp_info()
     ctxt.register_action( "QUIT" );
     ctxt.register_action( "CONFIRM", to_translation( "Toggle skill training / Upgrade stat" ) );
     ctxt.register_action( "CHANGE_PROFESSION_NAME", to_translation( "Change profession name" ) );
+    ctxt.register_action( "TOGGLE_OVERLAY_VISIBILITY" );
     ctxt.register_action( "HELP_KEYBINDINGS" );
 
     std::map<std::string, int> speed_effects;

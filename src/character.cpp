@@ -3223,6 +3223,11 @@ std::vector<std::string> Character::get_overlay_ids() const
     return rval;
 }
 
+std::map<std::string, bool> &Character::get_visible_overlays()
+{
+    return visible_overlays;
+}
+
 const SkillLevelMap &Character::get_all_skills() const
 {
     return *_skills;

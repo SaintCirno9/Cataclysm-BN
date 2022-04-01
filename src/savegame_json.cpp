@@ -616,6 +616,9 @@ void Character::load( const JsonObject &data )
         const std::string t = pmap.get_string( "trap" );
         known_traps.insert( trap_map::value_type( p, t ) );
     }
+
+    visible_overlays.clear();
+    data.read( "visible_overlays", visible_overlays );
 }
 
 /**
@@ -751,6 +754,15 @@ void Character::store( JsonOut &json ) const
         json.end_object();
     }
     json.end_array();
+
+    // Only store hidden overlays
+    std::map<std::string, bool> hidden_overlays;
+    for( auto iter = visible_overlays.begin(); iter != visible_overlays.end(); ++iter ) {
+        if( iter->second ) {
+            hidden_overlays.emplace( iter->first, iter->second );
+        }
+    }
+    json.member( "visible_overlays", hidden_overlays );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

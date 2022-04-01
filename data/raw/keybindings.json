@@ -3057,5 +3057,11 @@
     "id": "CHANGE_PROFESSION_NAME",
     "name": "Change profession name",
     "bindings": [ { "input_method": "keyboard", "key": "*" } ]
+  },
+  {
+    "type": "keybinding",
+    "id": "TOGGLE_OVERLAY_VISIBILITY",
+    "name": "Toggle overlay visibility",
+    "bindings": [ { "input_method": "keyboard", "key": "o" } ]
   }
 ]

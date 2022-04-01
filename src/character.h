@@ -1427,6 +1427,8 @@ class Character : public Creature, public visitable<Character>
          */
         std::vector<std::string> get_overlay_ids() const;
 
+        std::map<std::string, bool> &get_visible_overlays();
+
         // --------------- Skill Stuff ---------------
         int get_skill_level( const skill_id &ident ) const;
         int get_skill_level( const skill_id &ident, const item &context ) const;
@@ -2182,6 +2184,9 @@ class Character : public Creature, public visitable<Character>
         std::map<vitamin_id, int> vitamin_levels;
 
         pimpl<player_morale> morale;
+
+        // bool indicates whether the overlay is hidden, true means hidden
+        std::map<std::string, bool> visible_overlays;
 
     public:
         /**
