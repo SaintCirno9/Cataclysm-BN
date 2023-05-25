@@ -43,7 +43,7 @@ var structitype =
     [ "damage_max_", "structitype.html#ad473e287663d24df88e80b82a0d55b31", null ],
     [ "damage_min_", "structitype.html#a77df14c96eca8142e97b00a9e43f56cb", null ],
     [ "damage_scale", "structitype.html#acbc6974858332fd6933f71a304312d7f", null ],
-    [ "default_container", "structitype.html#a732c87e006a38b7dc35850450d588595", null ],
+    [ "default_container", "structitype.html#aaf325d340c06130e2fd994e54400a012", null ],
     [ "description", "structitype.html#a71434072aef9916ba0a62b7baa59a2b5", null ],
     [ "drop_action", "structitype.html#a9d0d50c14b184fceddd1a13ee279a6fc", null ],
     [ "emits", "structitype.html#ac93d9775de15087ba59da8d48e89cb6f", null ],
@@ -55,7 +55,6 @@ var structitype =
     [ "gun", "structitype.html#a623ec8243b1e599086fa3a23c3179370", null ],
     [ "gunmod", "structitype.html#a37edee7dafc5711621f26844cab78cf6", null ],
     [ "id", "structitype.html#ab018b62882b32eef884f4efd769c0993", null ],
-    [ "insulation_factor", "structitype.html#a1f98e4086129c4db4a4903e7a6bdac72", null ],
     [ "integral_volume", "structitype.html#aa5c0438c1bc94ded4e950ad684463a72", null ],
     [ "integral_weight", "structitype.html#a5699c972f1a284761d3b0e1501fe8185", null ],
     [ "item_tags", "structitype.html#abd1f0b721206f746d2a645b4ef6f804b", null ],
@@ -102,6 +101,7 @@ var structitype =
     [ "use_methods", "structitype.html#afa43bb71000c037c9918d907fdacf0b5", null ],
     [ "volume", "structitype.html#abd3ca12912367ae92d488864e09ea921", null ],
     [ "was_loaded", "structitype.html#a2fd0fb8931b801aaeb42d19d9725c958", null ],
+    [ "weapon_category", "structitype.html#a17e05c547c1dd581333c64cdb24299a0", null ],
     [ "weight", "structitype.html#a4ecb806dae208ff275b4aa50ffcd3902", null ],
     [ "wheel", "structitype.html#a5c286a821362f883c93b7d984ecae163", null ]
 ];

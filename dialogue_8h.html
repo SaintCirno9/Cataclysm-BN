@@ -146,9 +146,9 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ab6df03849cb069a437e9c5ee43a3050a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dialogue_8h.html#ab6df03849cb069a437e9c5ee43a3050a">talkfunction_ptr</a> = std::add_pointer&lt; void(<a class="el" href="classnpc.html">npc</a> &amp;)&gt;::<a class="el" href="enums_8h.html#ac7c2392f800a8be2feb093ef5fe48d40af3725cafa78eb43cc647b405bb6ecfab">type</a></td></tr>
+<tr class="memitem:ab6df03849cb069a437e9c5ee43a3050a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dialogue_8h.html#ab6df03849cb069a437e9c5ee43a3050a">talkfunction_ptr</a> = std::add_pointer&lt; void(<a class="el" href="classnpc.html">npc</a> &amp;)&gt;::type</td></tr>
 <tr class="separator:ab6df03849cb069a437e9c5ee43a3050a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95a639b7c1c82416a0e66fb65f998479"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dialogue_8h.html#a95a639b7c1c82416a0e66fb65f998479">dialogue_fun_ptr</a> = std::add_pointer&lt; void(<a class="el" href="classnpc.html">npc</a> &amp;)&gt;::<a class="el" href="enums_8h.html#ac7c2392f800a8be2feb093ef5fe48d40af3725cafa78eb43cc647b405bb6ecfab">type</a></td></tr>
+<tr class="memitem:a95a639b7c1c82416a0e66fb65f998479"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dialogue_8h.html#a95a639b7c1c82416a0e66fb65f998479">dialogue_fun_ptr</a> = std::add_pointer&lt; void(<a class="el" href="classnpc.html">npc</a> &amp;)&gt;::type</td></tr>
 <tr class="separator:a95a639b7c1c82416a0e66fb65f998479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71377f676c10f31d05ba78a9331980b6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dialogue_8h.html#a71377f676c10f31d05ba78a9331980b6">trial_mod</a> = std::pair&lt; std::string, int &gt;</td></tr>
 <tr class="separator:a71377f676c10f31d05ba78a9331980b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,7 +205,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="dialogue_8h.html#a95a639b7c1c82416a0e66fb65f998479">dialogue_fun_ptr</a> =  std::add_pointer&lt;void( <a class="el" href="classnpc.html">npc</a> &amp; )&gt;::<a class="el" href="enums_8h.html#ac7c2392f800a8be2feb093ef5fe48d40af3725cafa78eb43cc647b405bb6ecfab">type</a></td>
+          <td class="memname">using <a class="el" href="dialogue_8h.html#a95a639b7c1c82416a0e66fb65f998479">dialogue_fun_ptr</a> =  std::add_pointer&lt;void( <a class="el" href="classnpc.html">npc</a> &amp; )&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -221,7 +221,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="dialogue_8h.html#ab6df03849cb069a437e9c5ee43a3050a">talkfunction_ptr</a> =  std::add_pointer&lt;void ( <a class="el" href="classnpc.html">npc</a> &amp; )&gt;::<a class="el" href="enums_8h.html#ac7c2392f800a8be2feb093ef5fe48d40af3725cafa78eb43cc647b405bb6ecfab">type</a></td>
+          <td class="memname">using <a class="el" href="dialogue_8h.html#ab6df03849cb069a437e9c5ee43a3050a">talkfunction_ptr</a> =  std::add_pointer&lt;void ( <a class="el" href="classnpc.html">npc</a> &amp; )&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -334,26 +334,26 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="npctalk_8cpp_source.html#l03214">3214</a> of file <a class="el" href="npctalk_8cpp_source.html">npctalk.cpp</a>.</p>
-<div class="fragment"><div class="line"><a id="l03215" name="l03215"></a><span class="lineno"> 3215</span>{</div>
-<div class="line"><a id="l03216" name="l03216"></a><span class="lineno"> 3216</span>    <span class="keywordflow">if</span>( jo.<a class="code hl_function" href="classJsonObject.html#aa92b5eb23f6b39645877d79fbef784a0">has_array</a>( <span class="stringliteral">&quot;id&quot;</span> ) ) {</div>
-<div class="line"><a id="l03217" name="l03217"></a><span class="lineno"> 3217</span>        <span class="keywordflow">for</span>( <span class="keyword">auto</span> &amp;<span class="keywordtype">id</span> : jo.<a class="code hl_function" href="classJsonObject.html#a82c84e4f6eb744e24a0a60cb0ed88491">get_string_array</a>( <span class="stringliteral">&quot;id&quot;</span> ) ) {</div>
-<div class="line"><a id="l03218" name="l03218"></a><span class="lineno"> 3218</span>            <a class="code hl_variable" href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a>[<a class="code hl_function" href="classint__id.html#a09d4f824b2540da7e682d10cdf324081">id</a>].load( jo );</div>
-<div class="line"><a id="l03219" name="l03219"></a><span class="lineno"> 3219</span>        }</div>
-<div class="line"><a id="l03220" name="l03220"></a><span class="lineno"> 3220</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l03221" name="l03221"></a><span class="lineno"> 3221</span>        <span class="keyword">const</span> std::string <span class="keywordtype">id</span> = jo.<a class="code hl_function" href="classJsonObject.html#a96b6d1b9cf7bda4fc9cd177a99e0631c">get_string</a>( <span class="stringliteral">&quot;id&quot;</span> );</div>
-<div class="line"><a id="l03222" name="l03222"></a><span class="lineno"> 3222</span>        <a class="code hl_variable" href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a>[<a class="code hl_function" href="classint__id.html#a09d4f824b2540da7e682d10cdf324081">id</a>].load( jo );</div>
-<div class="line"><a id="l03223" name="l03223"></a><span class="lineno"> 3223</span>    }</div>
-<div class="line"><a id="l03224" name="l03224"></a><span class="lineno"> 3224</span>}</div>
-<div class="ttc" id="aclassJsonObject_html_a82c84e4f6eb744e24a0a60cb0ed88491"><div class="ttname"><a href="classJsonObject.html#a82c84e4f6eb744e24a0a60cb0ed88491">JsonObject::get_string_array</a></div><div class="ttdeci">std::vector&lt; std::string &gt; get_string_array(const std::string &amp;name) const</div><div class="ttdef"><b>Definition:</b> <a href="json_8cpp_source.html#l00352">json.cpp:352</a></div></div>
-<div class="ttc" id="aclassJsonObject_html_a96b6d1b9cf7bda4fc9cd177a99e0631c"><div class="ttname"><a href="classJsonObject.html#a96b6d1b9cf7bda4fc9cd177a99e0631c">JsonObject::get_string</a></div><div class="ttdeci">std::string get_string(const std::string &amp;name) const</div><div class="ttdef"><b>Definition:</b> <a href="json_8cpp_source.html#l00314">json.cpp:314</a></div></div>
-<div class="ttc" id="aclassJsonObject_html_aa92b5eb23f6b39645877d79fbef784a0"><div class="ttname"><a href="classJsonObject.html#aa92b5eb23f6b39645877d79fbef784a0">JsonObject::has_array</a></div><div class="ttdeci">bool has_array(const std::string &amp;name) const</div><div class="ttdef"><b>Definition:</b> <a href="json_8cpp_source.html#l00415">json.cpp:415</a></div></div>
+<p class="definition">Definition at line <a class="el" href="npctalk_8cpp_source.html#l03257">3257</a> of file <a class="el" href="npctalk_8cpp_source.html">npctalk.cpp</a>.</p>
+<div class="fragment"><div class="line"><a id="l03258" name="l03258"></a><span class="lineno"> 3258</span>{</div>
+<div class="line"><a id="l03259" name="l03259"></a><span class="lineno"> 3259</span>    <span class="keywordflow">if</span>( jo.<a class="code hl_function" href="classJsonObject.html#aa92b5eb23f6b39645877d79fbef784a0">has_array</a>( <span class="stringliteral">&quot;id&quot;</span> ) ) {</div>
+<div class="line"><a id="l03260" name="l03260"></a><span class="lineno"> 3260</span>        <span class="keywordflow">for</span>( <span class="keyword">auto</span> &amp;<span class="keywordtype">id</span> : jo.<a class="code hl_function" href="classJsonObject.html#a82c84e4f6eb744e24a0a60cb0ed88491">get_string_array</a>( <span class="stringliteral">&quot;id&quot;</span> ) ) {</div>
+<div class="line"><a id="l03261" name="l03261"></a><span class="lineno"> 3261</span>            <a class="code hl_variable" href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a>[<a class="code hl_function" href="classint__id.html#a09d4f824b2540da7e682d10cdf324081">id</a>].load( jo );</div>
+<div class="line"><a id="l03262" name="l03262"></a><span class="lineno"> 3262</span>        }</div>
+<div class="line"><a id="l03263" name="l03263"></a><span class="lineno"> 3263</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l03264" name="l03264"></a><span class="lineno"> 3264</span>        <span class="keyword">const</span> std::string <span class="keywordtype">id</span> = jo.<a class="code hl_function" href="classJsonObject.html#a96b6d1b9cf7bda4fc9cd177a99e0631c">get_string</a>( <span class="stringliteral">&quot;id&quot;</span> );</div>
+<div class="line"><a id="l03265" name="l03265"></a><span class="lineno"> 3265</span>        <a class="code hl_variable" href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a>[<a class="code hl_function" href="classint__id.html#a09d4f824b2540da7e682d10cdf324081">id</a>].load( jo );</div>
+<div class="line"><a id="l03266" name="l03266"></a><span class="lineno"> 3266</span>    }</div>
+<div class="line"><a id="l03267" name="l03267"></a><span class="lineno"> 3267</span>}</div>
+<div class="ttc" id="aclassJsonObject_html_a82c84e4f6eb744e24a0a60cb0ed88491"><div class="ttname"><a href="classJsonObject.html#a82c84e4f6eb744e24a0a60cb0ed88491">JsonObject::get_string_array</a></div><div class="ttdeci">std::vector&lt; std::string &gt; get_string_array(const std::string &amp;name) const</div><div class="ttdef"><b>Definition:</b> <a href="json_8cpp_source.html#l00420">json.cpp:420</a></div></div>
+<div class="ttc" id="aclassJsonObject_html_a96b6d1b9cf7bda4fc9cd177a99e0631c"><div class="ttname"><a href="classJsonObject.html#a96b6d1b9cf7bda4fc9cd177a99e0631c">JsonObject::get_string</a></div><div class="ttdeci">std::string get_string(const std::string &amp;name) const</div><div class="ttdef"><b>Definition:</b> <a href="json_8cpp_source.html#l00382">json.cpp:382</a></div></div>
+<div class="ttc" id="aclassJsonObject_html_aa92b5eb23f6b39645877d79fbef784a0"><div class="ttname"><a href="classJsonObject.html#aa92b5eb23f6b39645877d79fbef784a0">JsonObject::has_array</a></div><div class="ttdeci">bool has_array(const std::string &amp;name) const</div><div class="ttdef"><b>Definition:</b> <a href="json_8cpp_source.html#l00483">json.cpp:483</a></div></div>
 <div class="ttc" id="aclassint__id_html_a09d4f824b2540da7e682d10cdf324081"><div class="ttname"><a href="classint__id.html#a09d4f824b2540da7e682d10cdf324081">int_id::id</a></div><div class="ttdeci">const string_id&lt; ammo_effect &gt; &amp; id() const</div><div class="ttdef"><b>Definition:</b> <a href="ammo__effect_8cpp_source.html#l00033">ammo_effect.cpp:33</a></div></div>
-<div class="ttc" id="anpctalk_8cpp_html_a9d58f009a148e9132fad232a12f96306"><div class="ttname"><a href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a></div><div class="ttdeci">static std::map&lt; std::string, json_talk_topic &gt; json_talk_topics</div><div class="ttdef"><b>Definition:</b> <a href="npctalk_8cpp_source.html#l00113">npctalk.cpp:113</a></div></div>
+<div class="ttc" id="anpctalk_8cpp_html_a9d58f009a148e9132fad232a12f96306"><div class="ttname"><a href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a></div><div class="ttdeci">static std::map&lt; std::string, json_talk_topic &gt; json_talk_topics</div><div class="ttdef"><b>Definition:</b> <a href="npctalk_8cpp_source.html#l00114">npctalk.cpp:114</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="json_8cpp_source.html#l00314">JsonObject::get_string()</a>, <a class="el" href="json_8cpp_source.html#l00352">JsonObject::get_string_array()</a>, <a class="el" href="json_8cpp_source.html#l00415">JsonObject::has_array()</a>, <a class="el" href="ammo__effect_8cpp_source.html#l00033">int_id&lt; T &gt;::id()</a>, and <a class="el" href="npctalk_8cpp_source.html#l00113">json_talk_topics</a>.</p>
+<p class="reference">References <a class="el" href="json_8cpp_source.html#l00382">JsonObject::get_string()</a>, <a class="el" href="json_8cpp_source.html#l00420">JsonObject::get_string_array()</a>, <a class="el" href="json_8cpp_source.html#l00483">JsonObject::has_array()</a>, <a class="el" href="ammo__effect_8cpp_source.html#l00033">int_id&lt; T &gt;::id()</a>, and <a class="el" href="npctalk_8cpp_source.html#l00114">json_talk_topics</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="init_8cpp_source.html#l00238">DynamicDataLoader::initialize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="init_8cpp_source.html#l00243">DynamicDataLoader::initialize()</a>.</p>
 
 </div>
 </div>
@@ -372,14 +372,14 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="npctalk_8cpp_source.html#l03209">3209</a> of file <a class="el" href="npctalk_8cpp_source.html">npctalk.cpp</a>.</p>
-<div class="fragment"><div class="line"><a id="l03210" name="l03210"></a><span class="lineno"> 3210</span>{</div>
-<div class="line"><a id="l03211" name="l03211"></a><span class="lineno"> 3211</span>    <a class="code hl_variable" href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a>.clear();</div>
-<div class="line"><a id="l03212" name="l03212"></a><span class="lineno"> 3212</span>}</div>
+<p class="definition">Definition at line <a class="el" href="npctalk_8cpp_source.html#l03252">3252</a> of file <a class="el" href="npctalk_8cpp_source.html">npctalk.cpp</a>.</p>
+<div class="fragment"><div class="line"><a id="l03253" name="l03253"></a><span class="lineno"> 3253</span>{</div>
+<div class="line"><a id="l03254" name="l03254"></a><span class="lineno"> 3254</span>    <a class="code hl_variable" href="npctalk_8cpp.html#a9d58f009a148e9132fad232a12f96306">json_talk_topics</a>.clear();</div>
+<div class="line"><a id="l03255" name="l03255"></a><span class="lineno"> 3255</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="npctalk_8cpp_source.html#l00113">json_talk_topics</a>.</p>
+<p class="reference">References <a class="el" href="npctalk_8cpp_source.html#l00114">json_talk_topics</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="init_8cpp_source.html#l00531">DynamicDataLoader::unload_data()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="init_8cpp_source.html#l00537">DynamicDataLoader::unload_data()</a>.</p>
 
 </div>
 </div>
@@ -389,7 +389,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dialogue_8h.html">dialogue.h</a></li>
-    <li class="footer">Generated on Fri Nov 18 2022 11:24:24 for Cataclysm BN by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
+    <li class="footer">Generated on Thu May 25 2023 11:50:22 for Cataclysm BN by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>
 </body>

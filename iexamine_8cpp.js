@@ -93,6 +93,7 @@ var iexamine_8cpp =
     [ "effect_weak_antibiotic", "iexamine_8cpp.html#a66fbdfe284eb410fdbece4a3be98bf55", null ],
     [ "itype_2x4", "iexamine_8cpp.html#a2903765637d33796105b203898a261ba", null ],
     [ "itype_arm_splint", "iexamine_8cpp.html#a7f4916fdb349021f0c436cb1f91b80fa", null ],
+    [ "itype_battery", "iexamine_8cpp.html#ab5f267c571dc194e5b7e0b10b5136a33", null ],
     [ "itype_bot_broken_cyborg", "iexamine_8cpp.html#a9e957908de7da4eb428f8ba2c18e372e", null ],
     [ "itype_bot_prototype_cyborg", "iexamine_8cpp.html#ae08f58669ec83b9c17f0d00742a2ff31", null ],
     [ "itype_cash_card", "iexamine_8cpp.html#ac2c5780a50f6dc653232de1aeffc85ab", null ],

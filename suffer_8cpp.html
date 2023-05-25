@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('suffer_8cpp.html',''); initResizable()
 <code>#include &lt;list&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;tuple&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
@@ -105,6 +106,7 @@ $(document).ready(function(){initNavTree('suffer_8cpp.html',''); initResizable()
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;<a class="el" href="addiction_8h_source.html">addiction.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="avatar_8h_source.html">avatar.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bionics_8h_source.html">bionics.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="bodypart_8h_source.html">bodypart.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="calendar_8h_source.html">calendar.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="cata__utility_8h_source.html">cata_utility.h</a>&quot;</code><br />
@@ -129,7 +131,6 @@ $(document).ready(function(){initNavTree('suffer_8cpp.html',''); initResizable()
 <code>#include &quot;<a class="el" href="mutation_8h_source.html">mutation.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="name_8h_source.html">name.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="npc_8h_source.html">npc.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="optional_8h_source.html">optional.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="options_8h_source.html">options.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="overmapbuffer_8h_source.html">overmapbuffer.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="pldata_8h_source.html">pldata.h</a>&quot;</code><br />
@@ -157,6 +158,8 @@ Functions</h2></td></tr>
 <tr class="separator:aaa9613ea825773a0d74eaba7663a5dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e269d5100303d27c1fe13b7fb1b42d5"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a4e269d5100303d27c1fe13b7fb1b42d5">flag_RAD_RESIST</a> (&quot;RAD_RESIST&quot;)</td></tr>
 <tr class="separator:a4e269d5100303d27c1fe13b7fb1b42d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac515c71f173b6c81dbc78f60ce2b89d2"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#ac515c71f173b6c81dbc78f60ce2b89d2">flag_SPLINT</a> (&quot;SPLINT&quot;)</td></tr>
+<tr class="separator:ac515c71f173b6c81dbc78f60ce2b89d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa94108fad7ac28c25678804703bc5568"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#aa94108fad7ac28c25678804703bc5568">flag_SUN_GLASSES</a> (&quot;SUN_GLASSES&quot;)</td></tr>
 <tr class="separator:aa94108fad7ac28c25678804703bc5568"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada5a01cd92d233766c0eb00a58571c1b"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#ada5a01cd92d233766c0eb00a58571c1b">addiction_scaling</a> (float at_min, float at_max, float add_lvl)</td></tr>
@@ -164,8 +167,6 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:af240157d33eeab40ef36bc04dd472e75"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#af240157d33eeab40ef36bc04dd472e75">bio_advreactor</a> (&quot;bio_advreactor&quot;)</td></tr>
-<tr class="separator:af240157d33eeab40ef36bc04dd472e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a782060914f3f4d368a92b05f1094c667"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a782060914f3f4d368a92b05f1094c667">bio_dis_acid</a> (&quot;bio_dis_acid&quot;)</td></tr>
 <tr class="separator:a782060914f3f4d368a92b05f1094c667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44193bb869b306de76e586d95d41b433"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a44193bb869b306de76e586d95d41b433">bio_dis_shock</a> (&quot;bio_dis_shock&quot;)</td></tr>
@@ -184,12 +185,14 @@ Variables</h2></td></tr>
 <tr class="separator:afa77306e2784063065644a103b590119"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0478afa29c4abbefe9843f3e4b23268"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#ac0478afa29c4abbefe9843f3e4b23268">bio_noise</a> (&quot;bio_noise&quot;)</td></tr>
 <tr class="separator:ac0478afa29c4abbefe9843f3e4b23268"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab157731f2d7c0405beb22be08e122385"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#ab157731f2d7c0405beb22be08e122385">bio_plut_filter</a> (&quot;bio_plut_filter&quot;)</td></tr>
-<tr class="separator:ab157731f2d7c0405beb22be08e122385"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bf2812726cceeac0a0ab66cbffe43d9"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a0bf2812726cceeac0a0ab66cbffe43d9">bio_power_weakness</a> (&quot;bio_power_weakness&quot;)</td></tr>
 <tr class="separator:a0bf2812726cceeac0a0ab66cbffe43d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8964de0b81cdb278e268ded8e0e50fe9"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a8964de0b81cdb278e268ded8e0e50fe9">bio_reactor</a> (&quot;bio_reactor&quot;)</td></tr>
 <tr class="separator:a8964de0b81cdb278e268ded8e0e50fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af240157d33eeab40ef36bc04dd472e75"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#af240157d33eeab40ef36bc04dd472e75">bio_advreactor</a> (&quot;bio_advreactor&quot;)</td></tr>
+<tr class="separator:af240157d33eeab40ef36bc04dd472e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eef16a4df30cc71e93bfb760c29cbfc"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a5eef16a4df30cc71e93bfb760c29cbfc">bio_reactoroverride</a> (&quot;bio_reactoroverride&quot;)</td></tr>
+<tr class="separator:a5eef16a4df30cc71e93bfb760c29cbfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00836471ff2f1d41325cfa85003bc8f8"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#a00836471ff2f1d41325cfa85003bc8f8">bio_shakes</a> (&quot;bio_shakes&quot;)</td></tr>
 <tr class="separator:a00836471ff2f1d41325cfa85003bc8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc86d35521a6cd141ee5b1cc9f87547f"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="suffer_8cpp.html#abc86d35521a6cd141ee5b1cc9f87547f">bio_sleepy</a> (&quot;bio_sleepy&quot;)</td></tr>
@@ -412,22 +415,22 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="suffer_8cpp_source.html#l00172">172</a> of file <a class="el" href="suffer_8cpp_source.html">suffer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>{</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="comment">// Not addicted</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordflow">if</span>( add_lvl &lt; <a class="code hl_variable" href="addiction_8h.html#abd844ab165fa367b660aad16c47150ee">MIN_ADDICTION_LEVEL</a> ) {</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        <span class="keywordflow">return</span> 1.0f;</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    }</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="cata__utility_8h.html#ae9132dc8c0ea42f2d015053c30730de1">lerp</a>( at_min, at_max, ( add_lvl - <a class="code hl_variable" href="addiction_8h.html#abd844ab165fa367b660aad16c47150ee">MIN_ADDICTION_LEVEL</a> ) / <a class="code hl_variable" href="addiction_8h.html#a9357521f946a3eb67eaeb66a37fbd7e6">MAX_ADDICTION_LEVEL</a> );</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>}</div>
+<p class="definition">Definition at line <a class="el" href="suffer_8cpp_source.html#l00174">174</a> of file <a class="el" href="suffer_8cpp_source.html">suffer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>{</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="comment">// Not addicted</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordflow">if</span>( add_lvl &lt; <a class="code hl_variable" href="addiction_8h.html#abd844ab165fa367b660aad16c47150ee">MIN_ADDICTION_LEVEL</a> ) {</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="keywordflow">return</span> 1.0f;</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    }</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="cata__utility_8h.html#ae9132dc8c0ea42f2d015053c30730de1">lerp</a>( at_min, at_max, ( add_lvl - <a class="code hl_variable" href="addiction_8h.html#abd844ab165fa367b660aad16c47150ee">MIN_ADDICTION_LEVEL</a> ) / <a class="code hl_variable" href="addiction_8h.html#a9357521f946a3eb67eaeb66a37fbd7e6">MAX_ADDICTION_LEVEL</a> );</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>}</div>
 <div class="ttc" id="aaddiction_8h_html_a9357521f946a3eb67eaeb66a37fbd7e6"><div class="ttname"><a href="addiction_8h.html#a9357521f946a3eb67eaeb66a37fbd7e6">MAX_ADDICTION_LEVEL</a></div><div class="ttdeci">constexpr int MAX_ADDICTION_LEVEL</div><div class="ttdef"><b>Definition:</b> <a href="addiction_8h_source.html#l00014">addiction.h:14</a></div></div>
 <div class="ttc" id="aaddiction_8h_html_abd844ab165fa367b660aad16c47150ee"><div class="ttname"><a href="addiction_8h.html#abd844ab165fa367b660aad16c47150ee">MIN_ADDICTION_LEVEL</a></div><div class="ttdeci">constexpr int MIN_ADDICTION_LEVEL</div><div class="ttdef"><b>Definition:</b> <a href="addiction_8h_source.html#l00013">addiction.h:13</a></div></div>
-<div class="ttc" id="acata__utility_8h_html_ae9132dc8c0ea42f2d015053c30730de1"><div class="ttname"><a href="cata__utility_8h.html#ae9132dc8c0ea42f2d015053c30730de1">lerp</a></div><div class="ttdeci">constexpr T lerp(const T &amp;min, const T &amp;max, float t)</div><div class="ttdoc">Linear interpolation: returns first argument if t is 0, second if t is 1, otherwise proportional to t...</div><div class="ttdef"><b>Definition:</b> <a href="cata__utility_8h_source.html#l00155">cata_utility.h:155</a></div></div>
+<div class="ttc" id="acata__utility_8h_html_ae9132dc8c0ea42f2d015053c30730de1"><div class="ttname"><a href="cata__utility_8h.html#ae9132dc8c0ea42f2d015053c30730de1">lerp</a></div><div class="ttdeci">constexpr T lerp(const T &amp;min, const T &amp;max, float t)</div><div class="ttdoc">Linear interpolation: returns first argument if t is 0, second if t is 1, otherwise proportional to t...</div><div class="ttdef"><b>Definition:</b> <a href="cata__utility_8h_source.html#l00159">cata_utility.h:159</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="cata__utility_8h_source.html#l00155">lerp()</a>, <a class="el" href="addiction_8h_source.html#l00014">MAX_ADDICTION_LEVEL</a>, and <a class="el" href="addiction_8h_source.html#l00013">MIN_ADDICTION_LEVEL</a>.</p>
+<p class="reference">References <a class="el" href="cata__utility_8h_source.html#l00159">lerp()</a>, <a class="el" href="addiction_8h_source.html#l00014">MAX_ADDICTION_LEVEL</a>, and <a class="el" href="addiction_8h_source.html#l00013">MIN_ADDICTION_LEVEL</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>.</p>
 
 </div>
 </div>
@@ -455,7 +458,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>.</p>
 
 </div>
 </div>
@@ -483,7 +486,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -511,7 +514,35 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
+
+</div>
+</div>
+<a id="ac515c71f173b6c81dbc78f60ce2b89d2" name="ac515c71f173b6c81dbc78f60ce2b89d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac515c71f173b6c81dbc78f60ce2b89d2">&#9670;&nbsp;</a></span>flag_SPLINT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const std::string flag_SPLINT </td>
+          <td>(</td>
+          <td class="paramtype">&quot;SPLINT&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>.</p>
 
 </div>
 </div>
@@ -539,7 +570,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>.</p>
 
 </div>
 </div>
@@ -568,7 +599,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -596,7 +627,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -624,7 +655,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -652,7 +683,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -680,7 +711,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -708,7 +739,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>, and <a class="el" href="suffer_8cpp_source.html#l00250">Character::suffer_while_underwater()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>, and <a class="el" href="suffer_8cpp_source.html#l00251">Character::suffer_while_underwater()</a>.</p>
 
 </div>
 </div>
@@ -736,7 +767,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -764,7 +795,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -792,7 +823,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -820,35 +851,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
-
-</div>
-</div>
-<a id="ab157731f2d7c0405beb22be08e122385" name="ab157731f2d7c0405beb22be08e122385"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab157731f2d7c0405beb22be08e122385">&#9670;&nbsp;</a></span>bio_plut_filter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a> bio_plut_filter(&quot;bio_plut_filter&quot;) </td>
-          <td>(</td>
-          <td class="paramtype">&quot;bio_plut_filter&quot;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -876,7 +879,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -904,7 +907,35 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
+
+</div>
+</div>
+<a id="a5eef16a4df30cc71e93bfb760c29cbfc" name="a5eef16a4df30cc71e93bfb760c29cbfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eef16a4df30cc71e93bfb760c29cbfc">&#9670;&nbsp;</a></span>bio_reactoroverride</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="npc_8h.html#a136007e1e0b77eaf7dc4be58f6f42f87">bionic_id</a> bio_reactoroverride(&quot;bio_reactoroverride&quot;) </td>
+          <td>(</td>
+          <td class="paramtype">&quot;bio_reactoroverride&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -932,7 +963,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -960,7 +991,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -988,7 +1019,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -1016,7 +1047,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>.</p>
 
 </div>
 </div>
@@ -1044,7 +1075,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -1072,7 +1103,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01467">Character::suffer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01443">Character::suffer()</a>.</p>
 
 </div>
 </div>
@@ -1100,7 +1131,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>.</p>
 
 </div>
 </div>
@@ -1128,7 +1159,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>.</p>
 
 </div>
 </div>
@@ -1156,7 +1187,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01316">Character::suffer_from_artifacts()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01292">Character::suffer_from_artifacts()</a>.</p>
 
 </div>
 </div>
@@ -1184,7 +1215,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -1212,7 +1243,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -1240,7 +1271,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>.</p>
 
 </div>
 </div>
@@ -1268,7 +1299,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>, <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>, and <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>, <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>, and <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -1296,7 +1327,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -1324,7 +1355,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01467">Character::suffer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01443">Character::suffer()</a>.</p>
 
 </div>
 </div>
@@ -1352,7 +1383,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>, <a class="el" href="suffer_8cpp_source.html#l01338">Character::suffer_from_stimulants()</a>, <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>, and <a class="el" href="suffer_8cpp_source.html#l01380">Character::suffer_without_sleep()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>, <a class="el" href="suffer_8cpp_source.html#l01314">Character::suffer_from_stimulants()</a>, <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>, and <a class="el" href="suffer_8cpp_source.html#l01356">Character::suffer_without_sleep()</a>.</p>
 
 </div>
 </div>
@@ -1380,7 +1411,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>.</p>
 
 </div>
 </div>
@@ -1408,7 +1439,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>, and <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>, and <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -1436,7 +1467,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -1464,7 +1495,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>, and <a class="el" href="suffer_8cpp_source.html#l01380">Character::suffer_without_sleep()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>, and <a class="el" href="suffer_8cpp_source.html#l01356">Character::suffer_without_sleep()</a>.</p>
 
 </div>
 </div>
@@ -1492,7 +1523,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01531">Character::irradiate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01507">Character::irradiate()</a>.</p>
 
 </div>
 </div>
@@ -1520,7 +1551,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01754">Character::drench()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01730">Character::drench()</a>.</p>
 
 </div>
 </div>
@@ -1548,7 +1579,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>.</p>
 
 </div>
 </div>
@@ -1576,7 +1607,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01380">Character::suffer_without_sleep()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01356">Character::suffer_without_sleep()</a>.</p>
 
 </div>
 </div>
@@ -1604,7 +1635,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>, and <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>, and <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -1632,7 +1663,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01338">Character::suffer_from_stimulants()</a>, and <a class="el" href="suffer_8cpp_source.html#l01380">Character::suffer_without_sleep()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01314">Character::suffer_from_stimulants()</a>, and <a class="el" href="suffer_8cpp_source.html#l01356">Character::suffer_without_sleep()</a>.</p>
 
 </div>
 </div>
@@ -1660,7 +1691,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01754">Character::drench()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01730">Character::drench()</a>.</p>
 
 </div>
 </div>
@@ -1688,7 +1719,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>, <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>, <a class="el" href="suffer_8cpp_source.html#l01338">Character::suffer_from_stimulants()</a>, <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>, and <a class="el" href="suffer_8cpp_source.html#l01380">Character::suffer_without_sleep()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>, <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>, <a class="el" href="suffer_8cpp_source.html#l01314">Character::suffer_from_stimulants()</a>, <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>, and <a class="el" href="suffer_8cpp_source.html#l01356">Character::suffer_without_sleep()</a>.</p>
 
 </div>
 </div>
@@ -1716,7 +1747,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>, <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>, <a class="el" href="suffer_8cpp_source.html#l00367">Character::suffer_from_chemimbalance()</a>, and <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>, <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>, <a class="el" href="suffer_8cpp_source.html#l00368">Character::suffer_from_chemimbalance()</a>, and <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>.</p>
 
 </div>
 </div>
@@ -1744,7 +1775,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -1772,7 +1803,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>.</p>
 
 </div>
 </div>
@@ -1800,7 +1831,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -1828,7 +1859,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -1856,7 +1887,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>, <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>, <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>, and <a class="el" href="suffer_8cpp_source.html#l01380">Character::suffer_without_sleep()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>, <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>, <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>, and <a class="el" href="suffer_8cpp_source.html#l01356">Character::suffer_without_sleep()</a>.</p>
 
 </div>
 </div>
@@ -1884,7 +1915,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01225">Character::suffer_from_bad_bionics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01199">Character::suffer_from_bad_bionics()</a>.</p>
 
 </div>
 </div>
@@ -1912,7 +1943,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>.</p>
 
 </div>
 </div>
@@ -1940,7 +1971,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>.</p>
 
 </div>
 </div>
@@ -1968,7 +1999,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01531">Character::irradiate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01507">Character::irradiate()</a>.</p>
 
 </div>
 </div>
@@ -1996,7 +2027,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00616">Character::suffer_from_asthma()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00617">Character::suffer_from_asthma()</a>.</p>
 
 </div>
 </div>
@@ -2024,7 +2055,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -2052,7 +2083,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -2080,7 +2111,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -2108,7 +2139,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -2136,7 +2167,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00432">Character::suffer_from_schizophrenia()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00433">Character::suffer_from_schizophrenia()</a>.</p>
 
 </div>
 </div>
@@ -2164,7 +2195,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01889">Character::add_addiction()</a>, and <a class="el" href="suffer_8cpp_source.html#l00273">Character::suffer_from_addictions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01865">Character::add_addiction()</a>, and <a class="el" href="suffer_8cpp_source.html#l00274">Character::suffer_from_addictions()</a>.</p>
 
 </div>
 </div>
@@ -2192,7 +2223,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>, and <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>, and <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -2220,7 +2251,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01467">Character::suffer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01443">Character::suffer()</a>.</p>
 
 </div>
 </div>
@@ -2248,7 +2279,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -2276,7 +2307,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -2304,7 +2335,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2332,7 +2363,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01754">Character::drench()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01730">Character::drench()</a>.</p>
 
 </div>
 </div>
@@ -2360,7 +2391,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2388,7 +2419,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00250">Character::suffer_while_underwater()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00251">Character::suffer_while_underwater()</a>.</p>
 
 </div>
 </div>
@@ -2416,7 +2447,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00250">Character::suffer_while_underwater()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00251">Character::suffer_while_underwater()</a>.</p>
 
 </div>
 </div>
@@ -2444,7 +2475,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00250">Character::suffer_while_underwater()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00251">Character::suffer_while_underwater()</a>.</p>
 
 </div>
 </div>
@@ -2472,7 +2503,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2500,7 +2531,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -2528,7 +2559,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -2556,7 +2587,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -2584,7 +2615,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -2612,7 +2643,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2640,7 +2671,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2668,7 +2699,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2696,7 +2727,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -2724,7 +2755,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01889">Character::add_addiction()</a>, and <a class="el" href="suffer_8cpp_source.html#l00273">Character::suffer_from_addictions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01865">Character::add_addiction()</a>, and <a class="el" href="suffer_8cpp_source.html#l00274">Character::suffer_from_addictions()</a>.</p>
 
 </div>
 </div>
@@ -2752,7 +2783,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00367">Character::suffer_from_chemimbalance()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00368">Character::suffer_from_chemimbalance()</a>.</p>
 
 </div>
 </div>
@@ -2780,7 +2811,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -2808,7 +2839,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -2836,7 +2867,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01531">Character::irradiate()</a>, and <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01507">Character::irradiate()</a>, and <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -2864,7 +2895,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01531">Character::irradiate()</a>, and <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01507">Character::irradiate()</a>, and <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -2892,7 +2923,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01531">Character::irradiate()</a>, and <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01507">Character::irradiate()</a>, and <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -2920,7 +2951,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>, and <a class="el" href="suffer_8cpp_source.html#l01052">Character::suffer_from_radiation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>, and <a class="el" href="suffer_8cpp_source.html#l01055">Character::suffer_from_radiation()</a>.</p>
 
 </div>
 </div>
@@ -2948,7 +2979,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01602">Character::mend()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01578">Character::mend()</a>.</p>
 
 </div>
 </div>
@@ -2976,7 +3007,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3004,7 +3035,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -3032,7 +3063,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3060,7 +3091,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01754">Character::drench()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l01730">Character::drench()</a>.</p>
 
 </div>
 </div>
@@ -3088,7 +3119,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -3116,7 +3147,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -3144,7 +3175,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -3172,7 +3203,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3200,7 +3231,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00809">Character::suffer_from_sunburn()</a>, and <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00811">Character::suffer_from_sunburn()</a>, and <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -3228,7 +3259,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -3256,7 +3287,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -3284,7 +3315,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00717">Character::suffer_in_sunlight()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00719">Character::suffer_in_sunlight()</a>.</p>
 
 </div>
 </div>
@@ -3312,7 +3343,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3340,7 +3371,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00300">Character::suffer_while_awake()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00301">Character::suffer_while_awake()</a>.</p>
 
 </div>
 </div>
@@ -3368,7 +3399,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3396,7 +3427,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3424,7 +3455,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00944">Character::suffer_from_other_mutations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="suffer_8cpp_source.html#l00946">Character::suffer_from_other_mutations()</a>.</p>
 
 </div>
 </div>
@@ -3434,7 +3465,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="suffer_8cpp.html">suffer.cpp</a></li>
-    <li class="footer">Generated on Fri Nov 18 2022 11:24:30 for Cataclysm BN by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
+    <li class="footer">Generated on Thu May 25 2023 11:50:26 for Cataclysm BN by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>
 </body>

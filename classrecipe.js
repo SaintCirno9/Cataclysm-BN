@@ -53,7 +53,7 @@ var classrecipe =
     [ "bp_resources", "classrecipe.html#a1b7458090e8814b97c5faff0f7ed3d2e", null ],
     [ "byproducts", "classrecipe.html#ab2e645b839d27c9e037764715ce10612", null ],
     [ "category", "classrecipe.html#a7c22888c560df7aa0f06a071bb4b4f05", null ],
-    [ "charges", "classrecipe.html#a5ae960ab8b79e63245ee0068d7e098a9", null ],
+    [ "charges", "classrecipe.html#a58d36fa8d7ff05bd0ee8dce919d43a77", null ],
     [ "check_blueprint_needs", "classrecipe.html#a72de7bccd627230462097c65fa74353b", null ],
     [ "contained", "classrecipe.html#a263da793fbec87a1d4c1c0f589037e93", null ],
     [ "container", "classrecipe.html#ad5ca20850287651ea64cb1a69bd7fdfd", null ],
@@ -77,6 +77,7 @@ var classrecipe =
     [ "reversible", "classrecipe.html#a9962c832b13dd4ea662fead23963b8be", null ],
     [ "skill_used", "classrecipe.html#a0af03931c6f034e6b5269a5206e31bd2", null ],
     [ "skills_blueprint", "classrecipe.html#a06882977700a57c968f9da3d16ec75a4", null ],
+    [ "src", "classrecipe.html#a3340e6c14161c889be7c95cdd0f3b6f5", null ],
     [ "subcategory", "classrecipe.html#a0abc3495580963e9f6e3d5e88b8bfcf3", null ],
     [ "time", "classrecipe.html#a6f112b43cfa1f07bb48529d110839e6d", null ],
     [ "time_blueprint", "classrecipe.html#aa9e0d7b482ae05e58c49856eb8b4ff4e", null ]

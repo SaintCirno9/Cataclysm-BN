@@ -15,6 +15,7 @@ var game__inventory_8cpp =
     [ "weapon_inventory_preset", "classweapon__inventory__preset.html", "classweapon__inventory__preset" ],
     [ "holster_inventory_preset", "classholster__inventory__preset.html", "classholster__inventory__preset" ],
     [ "saw_barrel_inventory_preset", "classsaw__barrel__inventory__preset.html", "classsaw__barrel__inventory__preset" ],
+    [ "saw_stock_inventory_preset", "classsaw__stock__inventory__preset.html", "classsaw__stock__inventory__preset" ],
     [ "salvage_inventory_preset", "classsalvage__inventory__preset.html", "classsalvage__inventory__preset" ],
     [ "repair_inventory_preset", "classrepair__inventory__preset.html", "classrepair__inventory__preset" ],
     [ "bionic_install_preset", "classbionic__install__preset.html", "classbionic__install__preset" ],
@@ -50,6 +51,7 @@ var game__inventory_8cpp =
     [ "skill_electronics", "game__inventory_8cpp.html#af557f83ca09615da5b2ff84b924e01c0", null ],
     [ "skill_firstaid", "game__inventory_8cpp.html#aaf598d0fedebd89ec20f768da3b5fd8a", null ],
     [ "trait_DEBUG_BIONICS", "game__inventory_8cpp.html#a17e20a34f5837e50de3264fa93af7d0a", null ],
+    [ "trait_INFRESIST", "game__inventory_8cpp.html#a638e7eb4b8c8bdd2727763a767bd5617", null ],
     [ "trait_NOPAIN", "game__inventory_8cpp.html#af20cb84a6e8ccc0ed66c352edf29143b", null ],
     [ "trait_SAPROPHAGE", "game__inventory_8cpp.html#af4487f6f0e0eb0e3a671f5053fe2c219", null ],
     [ "trait_SAPROVORE", "game__inventory_8cpp.html#a92fc92f8871feb56f05a24b582966275", null ]
